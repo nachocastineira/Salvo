@@ -4,6 +4,8 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
+import java.util.Date;
+
 
 @SpringBootApplication
 public class SalvoApplication {
@@ -13,19 +15,63 @@ public class SalvoApplication {
 	}
 
 
-	// CommandLineRunner para crear nuevos Player y Game
 	@Bean
-	public CommandLineRunner initData(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
+	public CommandLineRunner initData2(GameRepository gameRepository) {
+		return (args) -> {
+
+			Date date1 = new Date();
+			date1 = Date.from(date1.toInstant());
+			gameRepository.save(new Game(date1)); //Fecha al momento de crear objeto
+
+			Date date2 = new Date();
+			date2 = Date.from(date2.toInstant().plusSeconds(3600));
+			gameRepository.save(new Game(date2)); //Fecha con 1 hora mas tarde
+
+			Date date3 = new Date();
+			date3 = Date.from(date3.toInstant().plusSeconds(7200));
+			gameRepository.save(new Game(date3)); //Fecha con 2 horas mas tarde
+		};
+	}
+
+
+	@Bean
+	public CommandLineRunner initData1(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
+		return (args) -> {
+			playerRepository.save(new Player("Jack15", "jackj@mail.com"));
+			playerRepository.save(new Player("Luck39", "luckj@mail.com"));
+		};
+	}
+
+	@Bean
+	public CommandLineRunner initData3(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
 		return (args) -> {
 			playerRepository.save(new Player("Jack15", "jackj@mail.com"));
 			playerRepository.save(new Player("Luck39", "luckj@mail.com"));
 
-			//Faltan agregar las fechas
-			gameRepository.save(new Game()); //Fecha al momento de crear objeto
-			gameRepository.save(new Game()); //Fecha con 1 hora mas tarde
-			gameRepository.save(new Game()); //Fecha con 2 horas mas tarde
+			Date date = new Date();
+			date = Date.from(date.toInstant());
+			gameRepository.save(new Game(date));
+			gameRepository.save(new Game(date));
+			gameRepository.save(new Game(date));
 
-			gamePlayerRepository.save((new GamePlayer()));
+/*			Date dateJoin = new Date();
+			dateJoin = Date.from(dateJoin.toInstant());*/
+//			gamePlayerRepository.save((new GamePlayer(new Game(null),  new Player("Juan", "mail@itr.com"), null)));
+
+/*			Game game1 = new Game();
+			game1.setCreationDate(date);
+
+			Player player1 = new Player();
+			player1.setUsername("pepe");
+			player1.setEmail("pepe@mail.com");*/
+
+/*			GamePlayer gamePlayer1 = new GamePlayer();
+			gamePlayer1.setGame(game1);
+			gamePlayer1.setPlayer(player1);
+			gamePlayer1.setJoinDate(date);*/
+
+			gamePlayerRepository.save(new GamePlayer(new Game(date), new Player("pepe", "pepe@mail.com"), date));
+
 
 		};
 	}

@@ -2,13 +2,8 @@ package com.codeoftheweb.salvo;
 
 import org.hibernate.annotations.GenericGenerator;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
 import java.util.Date;
-import javax.persistence.FetchType;
-import javax.persistence.OneToMany;
 import java.util.Set;
 import java.util.List;
 
@@ -24,7 +19,7 @@ public class Game {
     private Long id;
     private Date creationDate;
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     Set<GamePlayer> gamePlayers;
 
 
@@ -37,6 +32,11 @@ public class Game {
 
 
     //Getters y Setters
+
+    public Long getId() {
+        return id;
+    }
+
     public Date getCreationDate() {
         return creationDate;
     }
@@ -53,10 +53,6 @@ public class Game {
         this.gamePlayers = gamePlayers;
     }
 
-    //metodos
-/*    public List<Player> getPlayers() {
-        return gamePlayers.stream().map(gameP -> gameP.get)
-    }*/
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setGame(this);

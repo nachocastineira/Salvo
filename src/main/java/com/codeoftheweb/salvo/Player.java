@@ -4,6 +4,10 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Set;
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
+
 
 @Entity
 public class Player {
@@ -15,7 +19,7 @@ public class Player {
     private String username;
     private String email;
 
-    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
     Set<GamePlayer> gamePlayers;
 
     public Player() { }
@@ -23,6 +27,10 @@ public class Player {
     public Player(String user, String mail) {
         username = user;
         email = mail;
+    }
+
+    public long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -49,11 +57,9 @@ public class Player {
         this.gamePlayers = gamePlayers;
     }
 
-/*
-    public String toString() {
-        return username + " " + email;
+    public List<Game> getGames() {
+        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
     }
-*/
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setPlayer(this);
