@@ -24,9 +24,8 @@ public class Game {
     private Long id;
     private Date creationDate;
 
-    @OneToMany(mappedBy="game_id", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
-
 
 
     //Constructores

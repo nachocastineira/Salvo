@@ -15,7 +15,7 @@ public class Player {
     private String username;
     private String email;
 
-    @OneToMany(mappedBy="player_id", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     Set<GamePlayer> gamePlayers;
 
     public Player() { }
