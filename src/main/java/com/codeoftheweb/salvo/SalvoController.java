@@ -11,8 +11,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
     public class SalvoController {
 
+
     @Autowired
-    private GameRepository gameRepo;
+    private GamePlayerRepository gamePlayerRepository; //hay que usar este
 
 /*    @RequestMapping("/games")
     public List<Game> getGames(){
@@ -35,7 +36,7 @@ import java.util.stream.Collectors;
     }*/
 
 
-    @RequestMapping("/games")
+/*    @RequestMapping("/games")
     public  List<Object> getGamesInMap(){
 
         return gameRepo
@@ -43,7 +44,39 @@ import java.util.stream.Collectors;
                 .stream()
                 .map(g -> g.dtoGames())
                 .collect(Collectors.toList());
+    }*/
+
+
+    //SOLO TEST ----
+/*    @RequestMapping("/players")
+    public  List<Object> getPlayerMap(){
+
+        return playerRepo
+                .findAll()
+                .stream()
+                .map(p -> p.dtoPlayers())
+                .collect(Collectors.toList());
+    }*/
+
+    @RequestMapping("/games")
+    public  List<Object> getGamePlayerMap(){
+
+        return gamePlayerRepository
+                .findAll()
+                .stream()
+                .map(gamePlayer -> makeGamePlayerDTO(gamePlayer))
+                .collect(Collectors.toList());
     }
+
+
+        public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("Game", gamePlayer.getGame());
+        dto.put("created", gamePlayer.getJoinDate());
+        dto.put("gamePlayer", gamePlayer.toDTO());
+        return dto;
+    }
+
 
 }
 

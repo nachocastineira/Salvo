@@ -65,13 +65,14 @@ public class Player {
         return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
     }
 
-    public Map<String, Object> dtoPlayers() {
+
+/*    public Map<String, Object> dtoPlayers() {
 
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", getId());
         dto.put("email", getEmail());
         return dto;
-    }
+    }*/
 
 
 }

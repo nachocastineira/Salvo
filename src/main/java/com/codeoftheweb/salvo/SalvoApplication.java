@@ -53,6 +53,7 @@ public class SalvoApplication {
 			gameRepository.save(new Game(date));
 
 			gamePlayerRepository.save(new GamePlayer(new Game(date), new Player("pepe", "pepe@mail.com")));
+			gamePlayerRepository.save(new GamePlayer(new Game(date), new Player("juan", "juan@mail.com")));
 
 		};
 	}

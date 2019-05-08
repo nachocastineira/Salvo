@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -43,6 +44,7 @@ public class GamePlayer {
         return id;
     }
 
+    @JsonIgnore
     public Game getGame() {
         return game;
     }
@@ -51,6 +53,7 @@ public class GamePlayer {
         this.game = game;
     }
 
+    @JsonIgnore
     public Player getPlayer() {
         return player;
     }
@@ -63,16 +66,13 @@ public class GamePlayer {
         return joinDate;
     }
 
-    public Map<String, Object> dtoGamePlayers() {
+    public Map<String, Object> toDTO() {
 
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", getId());
         dto.put("player", getPlayer());
-        dto.put("joinDate", getJoinDate());
 
         return dto;
     }
-
-
 }
 
