@@ -68,20 +68,6 @@ public class GamePlayer {
         this.joinDate = joinDate;
     }*/
 
-/*    private Map<String, Object> makeGameDTO(Game game) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", game.getId());
-        dto.put("creationDate", game.getCreationDate());
-        return dto;
-    }
 
-
-    private Map<String, Object> makePlayerDTO(Player player) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", player.getId());
-        dto.put("email", player.getEmail());
-        dto.put("game", makeGameDTO(player.getGames());
-        return dto;
-    }*/
 }
 

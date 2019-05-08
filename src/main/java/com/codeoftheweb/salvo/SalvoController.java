@@ -35,7 +35,7 @@ import java.util.stream.Collectors;
     }
 
     //metodo punto5, almacenar id+creationDate usando un Map (clave-valor)
-    @RequestMapping("/games")
+/*    @RequestMapping("/games")
     public  Map<Integer, ArrayList<Game>> getAll(){
         Map<Integer,ArrayList<Game>> games = new HashMap<Integer,ArrayList<Game>>();
 
@@ -43,12 +43,16 @@ import java.util.stream.Collectors;
         games.put(1, lista);
 
         return games;
-    }
+    }*/
 
     @RequestMapping("/games2")
     public  List<Object> getGamesInMap(){
 
-        return gameRepo.findAll().stream().map(g -> g.dtoGames()).collect(Collectors.toList());
+        return gameRepo
+                .findAll()
+                .stream()
+                .map(g -> g.dtoGames())
+                .collect(Collectors.toList());
 
     }
 
