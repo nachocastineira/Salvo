@@ -20,8 +20,6 @@ public class Game {
     private Date creationDate;
 
 
-
-    //Constructores
     public Game(){}
 
     public Game(Date dateGame){
@@ -30,10 +28,6 @@ public class Game {
 
     public Date getCreationDate() {
         return creationDate;
-    }
-
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
     }
 
     public Long getId() {
@@ -73,23 +67,5 @@ public class Game {
         dto.put("created", getCreationDate());
         return dto;
     }
-
-
-    //map
-/*    private Map<String, Object> makeGameDTO(Game game) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", game.getId());
-        dto.put("creationDate", game.getCreationDate());
-        return dto;
-    }*//*
-
-
-    private Map<String, Object> makePlayerDTO(Player player) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", player.getId());
-        dto.put("email", player.getEmail());
-        return dto;
-    }*/
-
 
 }

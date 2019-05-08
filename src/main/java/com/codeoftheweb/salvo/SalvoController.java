@@ -11,14 +11,9 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
     public class SalvoController {
 
-
     @Autowired
     private GamePlayerRepository gamePlayerRepository; //hay que usar este
 
-/*    @RequestMapping("/games")
-    public List<Game> getGames(){
-        return gameRepo.findAll();
-    }*/
 
     // - Metodo para filtrar y mostrar solo los IDs de Games dentro de un array
 /*    @RequestMapping("/gamesid")
@@ -35,7 +30,7 @@ import java.util.stream.Collectors;
         return i;
     }*/
 
-
+    //SOLO PARA TEST ----
 /*    @RequestMapping("/games")
     public  List<Object> getGamesInMap(){
 
@@ -45,9 +40,6 @@ import java.util.stream.Collectors;
                 .map(g -> g.dtoGames())
                 .collect(Collectors.toList());
     }*/
-
-
-    //SOLO TEST ----
 /*    @RequestMapping("/players")
     public  List<Object> getPlayerMap(){
 
