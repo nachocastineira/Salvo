@@ -14,7 +14,7 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
-/*	@Bean
+	@Bean
 	public CommandLineRunner initData1(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
 		return (args) -> {
 			playerRepository.save(new Player("Jack15", "jackj@mail.com"));
@@ -38,7 +38,7 @@ public class SalvoApplication {
 			date3 = Date.from(date3.toInstant().plusSeconds(7200));
 			gameRepository.save(new Game(date3)); //Fecha con 2 horas mas tarde
 		};
-	}*/
+	}
 
 	@Bean
 	public CommandLineRunner initData3(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
@@ -51,22 +51,6 @@ public class SalvoApplication {
 			gameRepository.save(new Game(date));
 			gameRepository.save(new Game(date));
 			gameRepository.save(new Game(date));
-
-/*			Date dateJoin = new Date();
-			dateJoin = Date.from(dateJoin.toInstant());*/
-//			gamePlayerRepository.save((new GamePlayer(new Game(null),  new Player("Juan", "mail@itr.com"), null)));
-
-/*			Game game1 = new Game();
-			game1.setCreationDate(date);
-
-			Player player1 = new Player();
-			player1.setUsername("pepe");
-			player1.setEmail("pepe@mail.com");*/
-
-/*			GamePlayer gamePlayer1 = new GamePlayer();
-			gamePlayer1.setGame(game1);
-			gamePlayer1.setPlayer(player1);
-			gamePlayer1.setJoinDate(date);*/
 
 			gamePlayerRepository.save(new GamePlayer(new Game(date), new Player("pepe", "pepe@mail.com")));
 

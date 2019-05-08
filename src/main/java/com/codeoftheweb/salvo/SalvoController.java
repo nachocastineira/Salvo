@@ -20,7 +20,7 @@ import java.util.stream.Collectors;
     }*/
 
     // - Metodo para filtrar y mostrar solo los IDs de Games dentro de un array
-    @RequestMapping("/gamesid")
+/*    @RequestMapping("/gamesid")
     public  List<Long> getIdsDeGames(){
         List<Game> games = new ArrayList<>();
         List<Long> i = new ArrayList<>(); //un list para almacenar solo los ids de Game
@@ -32,20 +32,10 @@ import java.util.stream.Collectors;
         }
 
         return i;
-    }
-
-    //metodo punto5, almacenar id+creationDate usando un Map (clave-valor)
-/*    @RequestMapping("/games")
-    public  Map<Integer, ArrayList<Game>> getAll(){
-        Map<Integer,ArrayList<Game>> games = new HashMap<Integer,ArrayList<Game>>();
-
-        ArrayList<Game> lista = (ArrayList<Game>) gameRepo.findAll();
-        games.put(1, lista);
-
-        return games;
     }*/
 
-    @RequestMapping("/games2")
+
+    @RequestMapping("/games")
     public  List<Object> getGamesInMap(){
 
         return gameRepo
@@ -53,7 +43,6 @@ import java.util.stream.Collectors;
                 .stream()
                 .map(g -> g.dtoGames())
                 .collect(Collectors.toList());
-
     }
 
 }

@@ -28,21 +28,20 @@ public class GamePlayer {
     @JoinColumn(name="player_id")
     private Player player;
 
-//    private Date joinDate;
+    private Date joinDate;
 
-
-    // Defino constructores
 
     public  GamePlayer(){}
 
     public GamePlayer(Game game, Player player) {
         this.game = game;
         this.player = player;
-//        this.joinDate = joinDate;
+        this.joinDate = joinDate;
     }
 
-
-    // Getters y Setters
+    public Long getId() {
+        return id;
+    }
 
     public Game getGame() {
         return game;
@@ -60,13 +59,19 @@ public class GamePlayer {
         this.player = player;
     }
 
-/*    public Date getJoinDate() {
+    public Date getJoinDate() {
         return joinDate;
     }
 
-    public void setJoinDate(Date joinDate) {
-        this.joinDate = joinDate;
-    }*/
+    public Map<String, Object> dtoGamePlayers() {
+
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", getId());
+        dto.put("player", getPlayer());
+        dto.put("joinDate", getJoinDate());
+
+        return dto;
+    }
 
 
 }

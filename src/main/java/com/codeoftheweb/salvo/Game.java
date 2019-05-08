@@ -65,7 +65,7 @@ public class Game {
         return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
     }
 
-    //map
+    //map para task2.5
     public Map<String, Object> dtoGames() {
 
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
