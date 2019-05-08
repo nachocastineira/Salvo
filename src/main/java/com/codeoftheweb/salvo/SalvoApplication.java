@@ -68,7 +68,8 @@ public class SalvoApplication {
 			gamePlayer1.setPlayer(player1);
 			gamePlayer1.setJoinDate(date);*/
 
-			gamePlayerRepository.save(new GamePlayer(new Game(date), new Player("pepe", "pepe@mail.com"), date));
+			gamePlayerRepository.save(new GamePlayer(new Game(date), new Player("pepe", "pepe@mail.com")));
+
 		};
 	}
 

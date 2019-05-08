@@ -1,6 +1,5 @@
 package com.codeoftheweb.salvo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -16,7 +15,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private long id;
+    private Long id;
     private String username;
     private String email;
 
@@ -28,6 +27,10 @@ public class Player {
     public Player(String user, String mail) {
         this.username = user;
         this.email = mail;
+    }
+
+    public Long getId() {
+        return id;
     }
 
     public String getUsername() {
@@ -54,12 +57,12 @@ public class Player {
         this.gamePlayers = gamePlayers;
     }
 
-    public List<Game> getGames() {
-        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
-    }
-
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setPlayer(this);
         gamePlayers.add(gamePlayer);
+    }
+
+    public List<Game> getGames() {
+        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
     }
 }

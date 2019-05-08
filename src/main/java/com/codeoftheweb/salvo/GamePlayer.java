@@ -4,6 +4,7 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.List;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -25,17 +26,17 @@ public class GamePlayer {
     @JoinColumn(name="player_id")
     private Player player;
 
-    private Date joinDate;
+//    private Date joinDate;
 
 
     // Defino constructores
 
     public  GamePlayer(){}
 
-    public GamePlayer(Game game, Player player, Date joinDate) {
+    public GamePlayer(Game game, Player player) {
         this.game = game;
         this.player = player;
-        this.joinDate = joinDate;
+//        this.joinDate = joinDate;
     }
 
 
@@ -57,12 +58,12 @@ public class GamePlayer {
         this.player = player;
     }
 
-    public Date getJoinDate() {
+/*    public Date getJoinDate() {
         return joinDate;
     }
 
     public void setJoinDate(Date joinDate) {
         this.joinDate = joinDate;
-    }
+    }*/
 }
 

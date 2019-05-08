@@ -37,20 +37,13 @@ public class Game {
         this.creationDate = creationDate;
     }
 
-
+    public Long getId() {
+        return id;
+    }
 
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER) //el mappedBy coincide con atributo Game game de GamePlayer
             Set<GamePlayer> gamePlayers;
 
-    //Getters y Setters
-
-    public Set<GamePlayer> getGamePlayers() {
-        return gamePlayers;
-    }
-
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
-        this.gamePlayers = gamePlayers;
-    }
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setGame(this);
@@ -58,12 +51,22 @@ public class Game {
     }
 
 
+//devuelve list con toda la info de cada game
+/*    public List<Game> getGames() {
+        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
+    }*/
+
+
+/*    public List<Game> getIdGames() {
+        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
+    }*/
 
     @JsonIgnore
     public List<Player> getPlayers() {
-
         return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
     }
+
+
 
 
 
