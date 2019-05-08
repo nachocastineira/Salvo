@@ -4,9 +4,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.Set;
-import java.util.List;
+import java.util.*;
+
 
 import static java.util.stream.Collectors.toList;
 
@@ -64,6 +63,14 @@ public class Game {
     @JsonIgnore
     public List<Player> getPlayers() {
         return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
+    }
+
+    //map
+    public Map<Long, Date> dtoGames() {
+
+        Map<Long, Date> dto = new LinkedHashMap<Long, Date>();
+        dto.put(getId(), getCreationDate());
+        return dto;
     }
 
 

@@ -4,7 +4,9 @@ import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -64,6 +66,22 @@ public class GamePlayer {
 
     public void setJoinDate(Date joinDate) {
         this.joinDate = joinDate;
+    }*/
+
+/*    private Map<String, Object> makeGameDTO(Game game) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", game.getId());
+        dto.put("creationDate", game.getCreationDate());
+        return dto;
+    }
+
+
+    private Map<String, Object> makePlayerDTO(Player player) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", player.getId());
+        dto.put("email", player.getEmail());
+        dto.put("game", makeGameDTO(player.getGames());
+        return dto;
     }*/
 }
 
