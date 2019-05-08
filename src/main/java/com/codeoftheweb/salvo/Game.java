@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -7,7 +8,7 @@ import java.util.Date;
 import java.util.Set;
 import java.util.List;
 
-
+import static java.util.stream.Collectors.toList;
 
 
 @Entity
@@ -19,22 +20,13 @@ public class Game {
     private Long id;
     private Date creationDate;
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER, cascade = CascadeType.ALL)
-    Set<GamePlayer> gamePlayers;
 
 
     //Constructores
     public Game(){}
 
     public Game(Date dateGame){
-        creationDate = dateGame;
-    }
-
-
-    //Getters y Setters
-
-    public Long getId() {
-        return id;
+        this.creationDate = dateGame;
     }
 
     public Date getCreationDate() {
@@ -45,6 +37,13 @@ public class Game {
         this.creationDate = creationDate;
     }
 
+
+
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER) //el mappedBy coincide con atributo Game game de GamePlayer
+            Set<GamePlayer> gamePlayers;
+
+    //Getters y Setters
+
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
@@ -53,9 +52,19 @@ public class Game {
         this.gamePlayers = gamePlayers;
     }
 
-
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setGame(this);
         gamePlayers.add(gamePlayer);
     }
+
+
+
+    @JsonIgnore
+    public List<Player> getPlayers() {
+
+        return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
+    }
+
+
+
 }

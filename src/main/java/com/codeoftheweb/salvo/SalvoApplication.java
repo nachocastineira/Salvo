@@ -14,6 +14,13 @@ public class SalvoApplication {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
+/*	@Bean
+	public CommandLineRunner initData1(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
+		return (args) -> {
+			playerRepository.save(new Player("Jack15", "jackj@mail.com"));
+			playerRepository.save(new Player("Luck39", "luckj@mail.com"));
+		};
+	}
 
 	@Bean
 	public CommandLineRunner initData2(GameRepository gameRepository) {
@@ -24,23 +31,14 @@ public class SalvoApplication {
 			gameRepository.save(new Game(date1)); //Fecha al momento de crear objeto
 
 			Date date2 = new Date();
-			date2 = Date.from(date2.toInstant().plusSeconds(3600));
+			date2 = Date.from(date2.toInstant().plusSeconds(3600)); //.plusSecond para sumarle 1Hs a la actual
 			gameRepository.save(new Game(date2)); //Fecha con 1 hora mas tarde
 
 			Date date3 = new Date();
 			date3 = Date.from(date3.toInstant().plusSeconds(7200));
 			gameRepository.save(new Game(date3)); //Fecha con 2 horas mas tarde
 		};
-	}
-
-
-	@Bean
-	public CommandLineRunner initData1(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
-		return (args) -> {
-			playerRepository.save(new Player("Jack15", "jackj@mail.com"));
-			playerRepository.save(new Player("Luck39", "luckj@mail.com"));
-		};
-	}
+	}*/
 
 	@Bean
 	public CommandLineRunner initData3(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
@@ -71,8 +69,6 @@ public class SalvoApplication {
 			gamePlayer1.setJoinDate(date);*/
 
 			gamePlayerRepository.save(new GamePlayer(new Game(date), new Player("pepe", "pepe@mail.com"), date));
-
-
 		};
 	}
 
