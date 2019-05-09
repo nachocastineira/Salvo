@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 @RequestMapping("/api")
 public class SalvoController {
 
-
     @Autowired
     private GameRepository gameRepository;
 
@@ -27,11 +26,10 @@ public class SalvoController {
     public Map<String, Object> gameDTO(Game game) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", game.getId());
-        dto.put("creationDate", game.getCreationDate());
+        dto.put("creationDate", game.getCreationDate().getTime());
         dto.put("gamePlayers", getGamePlayersLista(game.getGamePlayers())); //obtengo todos los jugadores de ese juego, le mando los gamePlayer de ese juego
         return dto;
     }
-
 
     //hago lo mismo que arriba pero itero los gamePlayers
     public List<Object> getGamePlayersLista(Set<GamePlayer> gamePlayers){

@@ -41,36 +41,41 @@ public class SalvoApplication {
 	}*/
 
 	@Bean
-	public CommandLineRunner initData3(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
+	public CommandLineRunner initData3(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository, PlayerRepository playerRepository) {
 		return (args) -> {
-			playerRepository.save(new Player("Jack15", "jackj@mail.com"));
-			playerRepository.save(new Player("Luck39", "luckj@mail.com"));
 
+			//-------
 			Date date = new Date();
 			date = Date.from(date.toInstant());
 			Date date2 = new Date();
 			date2 = Date.from(date2.toInstant().plusSeconds(6000));
 
-			gameRepository.save(new Game(date));
-			gameRepository.save(new Game(date));
-			gameRepository.save(new Game(date));
-
-			//-------
 			Game game1 = new Game();
 			game1.setCreationDate(date);
 			Game game2 = new Game();
 			game2.setCreationDate(date2);
+			Game game3 = new Game();
+			game3.setCreationDate(date);
+			gameRepository.save(game1);
+			gameRepository.save(game2);
+			gameRepository.save(game3);
 
 			Player player1 = new Player();
-			player1.setUsername("Lucas");
 			player1.setEmail("lucas@mail.com");
 			Player player2 = new Player();
-			player2.setUsername("Jorge");
 			player2.setEmail("jorge@mail.com");
+			Player player3 = new Player();
+			player3.setEmail("jack@mail.com");
+			playerRepository.save(player1);
+			playerRepository.save(player2);
+			playerRepository.save(player3);
+
+
 
 			gamePlayerRepository.save(new GamePlayer(game1, player1));
-//			gamePlayerRepository.save(new GamePlayer(game1, player2));
+			gamePlayerRepository.save(new GamePlayer(game1, player2)); //No deja poner 2player en 1game
 			gamePlayerRepository.save(new GamePlayer(game2, player2));
+			gamePlayerRepository.save(new GamePlayer(game3, player3));
 			//-------
 
 		};
