@@ -3,6 +3,8 @@ package com.codeoftheweb.salvo;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Ship {
@@ -14,34 +16,47 @@ public class Ship {
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "gameplayer_id")
-    private GamePlayer gamePlayerID;
+    private GamePlayer gamePlayer;
 
-    private String shipType;
+    @ElementCollection
+    @Column(name = "Locations")
+    private List<String> shipLocation = new ArrayList<>();
+
+    private String type;
 
     public Ship() { }
 
-    public Ship(GamePlayer gamePlayerID, String shipType) {
-        this.gamePlayerID = gamePlayerID;
-        this.shipType = shipType;
+    public Ship(GamePlayer gamePlayer, List<String> shipLocation, String type) {
+        this.gamePlayer = gamePlayer;
+        this.shipLocation = shipLocation;
+        this.type = type;
     }
 
     public Long getId() {
         return id;
     }
 
-    public GamePlayer getGamePlayerID() {
-        return gamePlayerID;
+    public GamePlayer getGamePlayer() {
+        return gamePlayer;
     }
 
-    public void setGamePlayerID(GamePlayer gamePlayerID) {
-        this.gamePlayerID = gamePlayerID;
+    public void setGamePlayer(GamePlayer gamePlayer) {
+        this.gamePlayer = gamePlayer;
     }
 
-    public String getShipType() {
-        return shipType;
+    public String getType() {
+        return type;
     }
 
-    public void setShipType(String shipType) {
-        this.shipType = shipType;
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public List<String> getShipLocation() {
+        return shipLocation;
+    }
+
+    public void setShipLocation(List<String> shipLocation) {
+        this.shipLocation = shipLocation;
     }
 }

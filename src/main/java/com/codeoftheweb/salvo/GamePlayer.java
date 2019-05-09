@@ -26,12 +26,11 @@ public class GamePlayer {
     @JoinColumn(name="player_id")
     private Player player;
 
-    @OneToMany(mappedBy = "gamePlayerID", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayer", fetch=FetchType.EAGER)
     private
             Set<Ship> ships;
 
     private Date joinDate;
-
 
     public  GamePlayer(){}
 
@@ -65,6 +64,19 @@ public class GamePlayer {
 
     public Date getJoinDate() {
         return joinDate;
+    }
+
+    public Set<Ship> getShips() {
+        return ships;
+    }
+
+    public void setShips(Set<Ship> ships) {
+        this.ships = ships;
+    }
+
+    public void addShip(Ship ship){
+        ship.setGamePlayer(this);
+        getShips().add(ship);
     }
 
 }

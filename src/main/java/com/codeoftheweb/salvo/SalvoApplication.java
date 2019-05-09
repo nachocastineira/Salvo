@@ -4,7 +4,10 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
+
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 
 @SpringBootApplication
@@ -45,11 +48,13 @@ public class SalvoApplication {
 			(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository, PlayerRepository playerRepository, ShipRepository shipRepository) {
 		return (args) -> {
 
+			//-- DATES
 			Date date = new Date();
 			date = Date.from(date.toInstant());
 			Date date2 = new Date();
 			date2 = Date.from(date2.toInstant().plusSeconds(6000));
 
+			//-- GAMES
 			Game game1 = new Game();
 			game1.setCreationDate(date);
 			Game game2 = new Game();
@@ -60,6 +65,7 @@ public class SalvoApplication {
 			gameRepository.save(game2);
 			gameRepository.save(game3);
 
+			//-- PLAYERS
 			Player player1 = new Player();
 			player1.setEmail("lucas@mail.com");
 			Player player2 = new Player();
@@ -70,22 +76,51 @@ public class SalvoApplication {
 			playerRepository.save(player2);
 			playerRepository.save(player3);
 
+/*			GamePlayer gamePlayerTest = new GamePlayer(game1, player1);
+//			gamePlayerTest.addShip(ship1);
+			gamePlayerRepository.save(gamePlayerTest);*/
 
-			GamePlayer gamePlayerTest = new GamePlayer(game1, player1);
-			gamePlayerRepository.save(gamePlayerTest);
-
-			Ship ship1 = new Ship();
-			ship1.setShipType("cruiser");
-			ship1.setGamePlayerID(gamePlayerTest);
+/*			Ship ship1 = new Ship();
+			ship1.setType("cruiser");
+			Ship ship2 = new Ship();
+			ship2.setType("destructor");
 			shipRepository.save(ship1);
+			shipRepository.save(ship2);
+*/
+			//-- GAMEPLAYERS
+			GamePlayer gamePlayer1 = new GamePlayer(game1, player1);
+			GamePlayer gamePlayer2 = new GamePlayer(game1, player3);
+			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
+			GamePlayer gamePlayer4 = new GamePlayer(game2, player2);
+			GamePlayer gamePlayer5 = new GamePlayer(game3, player3);
+			GamePlayer gamePlayer6 = new GamePlayer(game3, player2);
+			GamePlayer gamePlayer7 = new GamePlayer(game1, player1);
+			gamePlayerRepository.save(gamePlayer1);
+			gamePlayerRepository.save(gamePlayer2);
+			gamePlayerRepository.save(gamePlayer3);
+			gamePlayerRepository.save(gamePlayer4);
+			gamePlayerRepository.save(gamePlayer5);
+			gamePlayerRepository.save(gamePlayer6);
+			gamePlayerRepository.save(gamePlayer7);
+
+			//--LOCATIONS SHIP
+			List<String> shipLocations1 = new ArrayList<>();
+			shipLocations1.add("H1");
+			shipLocations1.add("H2");
+			shipLocations1.add("H3");
+
+			List<String> shipLocations2 = new ArrayList<>();
+			shipLocations2.add("F5");
+			shipLocations2.add("F6");
+			shipLocations2.add("F7");
+
+			//---SHIPS
+			Ship ship1 = new Ship(gamePlayer7, shipLocations1, "destructor");
+			Ship ship2 = new Ship(gamePlayer5, shipLocations2, "cruiser");
+			shipRepository.save(ship1);
+			shipRepository.save(ship2);
 
 
-			gamePlayerRepository.save(new GamePlayer(game1, player1));
-			gamePlayerRepository.save(new GamePlayer(game1, player3));
-			gamePlayerRepository.save(new GamePlayer(game2, player1));
-			gamePlayerRepository.save(new GamePlayer(game2, player2));
-			gamePlayerRepository.save(new GamePlayer(game3, player2));
-			gamePlayerRepository.save(new GamePlayer(game3, player3));
 		};
 	}
 }
