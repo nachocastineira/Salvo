@@ -37,7 +37,7 @@ public class GamePlayer {
     public GamePlayer(Game game, Player player) {
         this.game = game;
         this.player = player;
-        this.joinDate = joinDate;
+        this.joinDate = new Date();
     }
 
     public Long getId() {
@@ -66,13 +66,5 @@ public class GamePlayer {
         return joinDate;
     }
 
-    public Map<String, Object> toDTO() {
-
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", getId());
-        dto.put("player", getPlayer());
-
-        return dto;
-    }
 }
 

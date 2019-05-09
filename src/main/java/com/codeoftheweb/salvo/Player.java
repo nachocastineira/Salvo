@@ -1,5 +1,6 @@
 package com.codeoftheweb.salvo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
@@ -18,7 +19,8 @@ public class Player {
     private String username;
     private String email;
 
-    @OneToMany(mappedBy="player", fetch=FetchType.EAGER) //el mappedBy coincide con atributo Player player de GamePlayer
+    @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
+    private //el mappedBy coincide con atributo Player player de GamePlayer
     Set<GamePlayer> gamePlayers;
 
     public Player() { }
@@ -58,11 +60,12 @@ public class Player {
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setPlayer(this);
-        gamePlayers.add(gamePlayer);
+        getGamePlayers().add(gamePlayer);
     }
 
+    @JsonIgnore
     public List<Game> getGames() {
-        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
+        return getGamePlayers().stream().map(sub -> sub.getGame()).collect(toList());
     }
 
 

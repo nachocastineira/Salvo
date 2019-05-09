@@ -19,6 +19,9 @@ public class Game {
     private Long id;
     private Date creationDate;
 
+    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    private //el mappedBy coincide con atributo Game game de GamePlayer
+            Set<GamePlayer> gamePlayers;
 
     public Game(){}
 
@@ -34,38 +37,27 @@ public class Game {
         return id;
     }
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER) //el mappedBy coincide con atributo Game game de GamePlayer
-            Set<GamePlayer> gamePlayers;
+    public void setCreationDate(Date creationDate) {
+        this.creationDate = creationDate;
+    }
 
 
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setGame(this);
-        gamePlayers.add(gamePlayer);
+        getGamePlayers().add(gamePlayer);
     }
 
-
-//devuelve list con toda la info de cada game
-/*    public List<Game> getGames() {
-        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
-    }*/
-
-
-/*    public List<Game> getIdGames() {
-        return gamePlayers.stream().map(sub -> sub.getGame()).collect(toList());
-    }*/
-
-    @JsonIgnore
+@JsonIgnore
     public List<Player> getPlayers() {
-        return gamePlayers.stream().map(sub -> sub.getPlayer()).collect(toList());
+        return getGamePlayers().stream().map(sub -> sub.getPlayer()).collect(toList());
     }
 
-    //map para task2.5
-    public Map<String, Object> dtoGames() {
 
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", getId());
-        dto.put("created", getCreationDate());
-        return dto;
+    public Set<GamePlayer> getGamePlayers() {
+        return gamePlayers;
     }
 
+    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+        this.gamePlayers = gamePlayers;
+    }
 }

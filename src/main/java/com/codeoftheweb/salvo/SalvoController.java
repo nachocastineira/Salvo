@@ -9,66 +9,44 @@ import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api")
-    public class SalvoController {
+public class SalvoController {
+
 
     @Autowired
-    private GamePlayerRepository gamePlayerRepository; //hay que usar este
-
-
-    // - Metodo para filtrar y mostrar solo los IDs de Games dentro de un array
-/*    @RequestMapping("/gamesid")
-    public  List<Long> getIdsDeGames(){
-        List<Game> games = new ArrayList<>();
-        List<Long> i = new ArrayList<>(); //un list para almacenar solo los ids de Game
-        games = gameRepo.findAll(); //en la lista almaceno todos los objetos Game
-
-        //Un for acumulador para almacenar los ids en la lista "i" previamente creada
-        for (Game game:games){
-            i.add(game.getId());
-        }
-
-        return i;
-    }*/
-
-    //SOLO PARA TEST ----
-/*    @RequestMapping("/games")
-    public  List<Object> getGamesInMap(){
-
-        return gameRepo
-                .findAll()
-                .stream()
-                .map(g -> g.dtoGames())
-                .collect(Collectors.toList());
-    }*/
-/*    @RequestMapping("/players")
-    public  List<Object> getPlayerMap(){
-
-        return playerRepo
-                .findAll()
-                .stream()
-                .map(p -> p.dtoPlayers())
-                .collect(Collectors.toList());
-    }*/
+    private GameRepository gameRepository;
 
     @RequestMapping("/games")
-    public  List<Object> getGamePlayerMap(){
-
-        return gamePlayerRepository
+    public  List<Object> getAll(){
+        return gameRepository //retornar el gameRepo
                 .findAll()
                 .stream()
-                .map(gamePlayer -> makeGamePlayerDTO(gamePlayer))
+                .map(game -> gameDTO(game)) //que sea -> gameDTO, devuelvo un solo map con dos registros {1 juego -> 2 jugadores}
                 .collect(Collectors.toList());
     }
 
-
-        public Map<String, Object> makeGamePlayerDTO(GamePlayer gamePlayer) {
+    public Map<String, Object> gameDTO(Game game) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("Game", gamePlayer.getGame());
-        dto.put("created", gamePlayer.getJoinDate());
-        dto.put("gamePlayer", gamePlayer.toDTO());
+        dto.put("id", game.getId());
+        dto.put("creationDate", game.getCreationDate());
+        dto.put("gamePlayers", getGamePlayersLista(game.getGamePlayers())); //obtengo todos los jugadores de ese juego, le mando los gamePlayer de ese juego
         return dto;
     }
 
+
+    //hago lo mismo que arriba pero itero los gamePlayers
+    public List<Object> getGamePlayersLista(Set<GamePlayer> gamePlayers){
+        return gamePlayers
+                .stream()
+                .map(gamePlayer -> gamePlayerDTO(gamePlayer)) //itero, para ir obteniendo todos los gamePlayer con el metodo de abajo
+                .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> gamePlayerDTO(GamePlayer gamePlayer) { //el map recibe un gamePlayer, y devuelvo sus datos
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", gamePlayer.getId());
+        dto.put("player", gamePlayer.getPlayer());
+        return dto;
+    }
 
 }
 
