@@ -4,10 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.annotations.GenericGenerator;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
@@ -28,6 +25,10 @@ public class GamePlayer {
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name="player_id")
     private Player player;
+
+    @OneToMany(mappedBy = "gamePlayerID", fetch=FetchType.EAGER)
+    private
+            Set<Ship> ships;
 
     private Date joinDate;
 

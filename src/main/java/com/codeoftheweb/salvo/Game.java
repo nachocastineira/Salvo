@@ -41,17 +41,15 @@ public class Game {
         this.creationDate = creationDate;
     }
 
-
     public void addGamePlayer(GamePlayer gamePlayer) {
         gamePlayer.setGame(this);
         getGamePlayers().add(gamePlayer);
     }
 
-@JsonIgnore
+    @JsonIgnore
     public List<Player> getPlayers() {
         return getGamePlayers().stream().map(sub -> sub.getPlayer()).collect(toList());
     }
-
 
     public Set<GamePlayer> getGamePlayers() {
         return gamePlayers;

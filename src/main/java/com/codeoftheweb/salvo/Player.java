@@ -57,6 +57,4 @@ public class Player {
     public List<Game> getGames() {
         return getGamePlayers().stream().map(sub -> sub.getGame()).collect(toList());
     }
-
-
 }

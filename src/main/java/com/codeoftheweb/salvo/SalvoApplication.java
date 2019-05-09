@@ -41,10 +41,10 @@ public class SalvoApplication {
 	}*/
 
 	@Bean
-	public CommandLineRunner initData3(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository, PlayerRepository playerRepository) {
+	public CommandLineRunner initData3
+			(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository, PlayerRepository playerRepository, ShipRepository shipRepository) {
 		return (args) -> {
 
-			//-------
 			Date date = new Date();
 			date = Date.from(date.toInstant());
 			Date date2 = new Date();
@@ -71,15 +71,21 @@ public class SalvoApplication {
 			playerRepository.save(player3);
 
 
+			GamePlayer gamePlayerTest = new GamePlayer(game1, player1);
+			gamePlayerRepository.save(gamePlayerTest);
+
+			Ship ship1 = new Ship();
+			ship1.setShipType("cruiser");
+			ship1.setGamePlayerID(gamePlayerTest);
+			shipRepository.save(ship1);
+
 
 			gamePlayerRepository.save(new GamePlayer(game1, player1));
-			gamePlayerRepository.save(new GamePlayer(game1, player2)); //No deja poner 2player en 1game
+			gamePlayerRepository.save(new GamePlayer(game1, player3));
+			gamePlayerRepository.save(new GamePlayer(game2, player1));
 			gamePlayerRepository.save(new GamePlayer(game2, player2));
+			gamePlayerRepository.save(new GamePlayer(game3, player2));
 			gamePlayerRepository.save(new GamePlayer(game3, player3));
-			//-------
-
 		};
 	}
-
-
 }
