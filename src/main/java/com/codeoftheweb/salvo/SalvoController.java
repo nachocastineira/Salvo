@@ -47,12 +47,6 @@ public class SalvoController {
         return dto;
     }
 
-    public List<Object> getSalvoList(Set<Salvo> salvoes){
-        return salvoes
-                .stream()
-                .map(salvo ->salvoDTO(salvo))
-                .collect(Collectors.toList());
-    }
 
     public Map<String, Object> salvoDTO(Salvo salvo){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
@@ -76,7 +70,9 @@ public class SalvoController {
         dto.put("created", gamePlayer.getGame().getCreationDate());
         dto.put("gamePlayers", getGamePlayersLista(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships", gamePlayer.getShips());
-        dto.put("salvoes", getSalvoList(gamePlayer.getSalvoes()));
+        dto.put("salvoes", gamePlayer.getGame().getGamePlayers()
+                .stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvoes()
+                        .stream().map(salvo -> salvoDTO (salvo))));
 
         return dto;
     }

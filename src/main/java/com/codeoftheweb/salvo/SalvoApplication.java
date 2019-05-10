@@ -124,9 +124,10 @@ public class SalvoApplication {
 
 			//--LOCATIONS SALVOES
 			List<String> salvoesLocation1 = new ArrayList<>();
-			salvoesLocation1.add("I5");
-			salvoesLocation1.add("I6");
-			salvoesLocation1.add("I7");
+			salvoesLocation1.add("D4");
+			salvoesLocation1.add("H2");
+			salvoesLocation1.add("E4");
+
 			//-- SALVOES
 			Salvo salvo1 = new Salvo(gamePlayer1, "1", salvoesLocation1);
 			salvoRepository.save(salvo1);
