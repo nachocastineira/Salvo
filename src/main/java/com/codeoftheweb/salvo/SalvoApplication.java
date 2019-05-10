@@ -76,23 +76,13 @@ public class SalvoApplication {
 			playerRepository.save(player2);
 			playerRepository.save(player3);
 
-/*			GamePlayer gamePlayerTest = new GamePlayer(game1, player1);
-//			gamePlayerTest.addShip(ship1);
-			gamePlayerRepository.save(gamePlayerTest);*/
 
-/*			Ship ship1 = new Ship();
-			ship1.setType("cruiser");
-			Ship ship2 = new Ship();
-			ship2.setType("destructor");
-			shipRepository.save(ship1);
-			shipRepository.save(ship2);
-*/
 			//-- GAMEPLAYERS
 			GamePlayer gamePlayer1 = new GamePlayer(game1, player1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1, player3);
 			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
 			GamePlayer gamePlayer4 = new GamePlayer(game2, player2);
-			GamePlayer gamePlayer5 = new GamePlayer(game3, player3);
+			GamePlayer gamePlayer5 = new GamePlayer(game1, player3);
 			GamePlayer gamePlayer6 = new GamePlayer(game3, player2);
 			GamePlayer gamePlayer7 = new GamePlayer(game1, player1);
 			gamePlayerRepository.save(gamePlayer1);
@@ -114,14 +104,18 @@ public class SalvoApplication {
 			shipLocations2.add("F6");
 			shipLocations2.add("F7");
 
-			//-----
-			//----
+			List<String> shipLocations3 = new ArrayList<>();
+			shipLocations3.add("A7");
+			shipLocations3.add("A8");
+			shipLocations3.add("A9");
 
 			//---SHIPS
-			Ship ship1 = new Ship(gamePlayer7, shipLocations1, "destructor");
-			Ship ship2 = new Ship(gamePlayer5, shipLocations2, "cruiser");
+			Ship ship1 = new Ship(gamePlayer1, shipLocations1, "destructor");
+			Ship ship2 = new Ship(gamePlayer2, shipLocations2, "cruiser");
+			Ship ship3 = new Ship(gamePlayer1, shipLocations3, "submarine");
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
+			shipRepository.save(ship3);
 
 
 		};
