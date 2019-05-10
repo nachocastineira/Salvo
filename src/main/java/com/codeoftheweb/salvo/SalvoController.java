@@ -47,6 +47,21 @@ public class SalvoController {
         return dto;
     }
 
+    public List<Object> getSalvoList(Set<Salvo> salvoes){
+        return salvoes
+                .stream()
+                .map(salvo ->salvoDTO(salvo))
+                .collect(Collectors.toList());
+    }
+
+    public Map<String, Object> salvoDTO(Salvo salvo){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", salvo.getId());
+        dto.put("turn", salvo.getTurn());
+        dto.put("locations", salvo.getSalvcLocations());
+        return dto;
+    }
+
     @Autowired
     private GamePlayerRepository gamePlayerRepository;
 
@@ -61,6 +76,7 @@ public class SalvoController {
         dto.put("created", gamePlayer.getGame().getCreationDate());
         dto.put("gamePlayers", getGamePlayersLista(gamePlayer.getGame().getGamePlayers()));
         dto.put("ships", gamePlayer.getShips());
+        dto.put("salvoes", getSalvoList(gamePlayer.getSalvoes()));
 
         return dto;
     }

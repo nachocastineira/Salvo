@@ -45,7 +45,8 @@ public class SalvoApplication {
 
 	@Bean
 	public CommandLineRunner initData3
-			(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository, PlayerRepository playerRepository, ShipRepository shipRepository) {
+			(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository,
+			 PlayerRepository playerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
 		return (args) -> {
 
 			//-- DATES
@@ -80,35 +81,32 @@ public class SalvoApplication {
 			//-- GAMEPLAYERS
 			GamePlayer gamePlayer1 = new GamePlayer(game1, player1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1, player3);
-			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
-			GamePlayer gamePlayer4 = new GamePlayer(game2, player2);
-			GamePlayer gamePlayer5 = new GamePlayer(game1, player3);
-			GamePlayer gamePlayer6 = new GamePlayer(game3, player2);
-			GamePlayer gamePlayer7 = new GamePlayer(game1, player1);
+//			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
+//			GamePlayer gamePlayer4 = new GamePlayer(game2, player2);
+//			GamePlayer gamePlayer5 = new GamePlayer(game1, player3);
+//			GamePlayer gamePlayer6 = new GamePlayer(game3, player2);
+//			GamePlayer gamePlayer7 = new GamePlayer(game1, player1);
 			gamePlayerRepository.save(gamePlayer1);
 			gamePlayerRepository.save(gamePlayer2);
-			gamePlayerRepository.save(gamePlayer3);
-			gamePlayerRepository.save(gamePlayer4);
-			gamePlayerRepository.save(gamePlayer5);
-			gamePlayerRepository.save(gamePlayer6);
-			gamePlayerRepository.save(gamePlayer7);
+//			gamePlayerRepository.save(gamePlayer3);
+//			gamePlayerRepository.save(gamePlayer4);
+//			gamePlayerRepository.save(gamePlayer5);
+//			gamePlayerRepository.save(gamePlayer6);
+//			gamePlayerRepository.save(gamePlayer7);
 
 			//--LOCATIONS SHIP
 			List<String> shipLocations1 = new ArrayList<>();
-			shipLocations1.add("H1");
+			shipLocations1.add("H2");
 			shipLocations1.add("H3");
 			shipLocations1.add("H4");
-
 			List<String> shipLocations2 = new ArrayList<>();
 			shipLocations2.add("F5");
 			shipLocations2.add("F6");
 			shipLocations2.add("F7");
-
 			List<String> shipLocations3 = new ArrayList<>();
 			shipLocations3.add("D4");
 			shipLocations3.add("E4");
 			shipLocations3.add("F4");
-
 			List<String> shipLocations4 = new ArrayList<>();
 			shipLocations4.add("A10");
 			shipLocations4.add("B10");
@@ -119,12 +117,19 @@ public class SalvoApplication {
 			Ship ship2 = new Ship(gamePlayer1, shipLocations3, "Submarine");  //Game 1 -> Player 1
 			Ship ship3 = new Ship(gamePlayer2, shipLocations2, "Cruiser");    //Game 1 -> Player 3
 			Ship ship4 = new Ship(gamePlayer2, shipLocations4, "Patrol Boat");    //Game 1 -> Player 3
-
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
 			shipRepository.save(ship4);
 
+			//--LOCATIONS SALVOES
+			List<String> salvoesLocation1 = new ArrayList<>();
+			salvoesLocation1.add("I5");
+			salvoesLocation1.add("I6");
+			salvoesLocation1.add("I7");
+			//-- SALVOES
+			Salvo salvo1 = new Salvo(gamePlayer1, "1", salvoesLocation1);
+			salvoRepository.save(salvo1);
 
 		};
 	}
