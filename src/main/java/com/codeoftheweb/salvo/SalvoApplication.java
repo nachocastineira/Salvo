@@ -114,6 +114,8 @@ public class SalvoApplication {
 			shipLocations2.add("F6");
 			shipLocations2.add("F7");
 
+			//-----
+
 			//---SHIPS
 			Ship ship1 = new Ship(gamePlayer7, shipLocations1, "destructor");
 			Ship ship2 = new Ship(gamePlayer5, shipLocations2, "cruiser");
