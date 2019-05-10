@@ -67,11 +67,11 @@ public class SalvoApplication {
 
 			//-- PLAYERS
 			Player player1 = new Player();
-			player1.setEmail("lucas@mail.com");
+			player1.setEmail("lucas_p1@gmail.com");
 			Player player2 = new Player();
-			player2.setEmail("jorge@mail.com");
+			player2.setEmail("jorge_p2@hotmail.com");
 			Player player3 = new Player();
-			player3.setEmail("jack@mail.com");
+			player3.setEmail("jack_p3@outlook.com");
 			playerRepository.save(player1);
 			playerRepository.save(player2);
 			playerRepository.save(player3);
@@ -96,8 +96,8 @@ public class SalvoApplication {
 			//--LOCATIONS SHIP
 			List<String> shipLocations1 = new ArrayList<>();
 			shipLocations1.add("H1");
-			shipLocations1.add("H2");
 			shipLocations1.add("H3");
+			shipLocations1.add("H4");
 
 			List<String> shipLocations2 = new ArrayList<>();
 			shipLocations2.add("F5");
@@ -105,17 +105,25 @@ public class SalvoApplication {
 			shipLocations2.add("F7");
 
 			List<String> shipLocations3 = new ArrayList<>();
-			shipLocations3.add("A7");
-			shipLocations3.add("A8");
-			shipLocations3.add("A9");
+			shipLocations3.add("D4");
+			shipLocations3.add("E4");
+			shipLocations3.add("F4");
+
+			List<String> shipLocations4 = new ArrayList<>();
+			shipLocations4.add("A10");
+			shipLocations4.add("B10");
+			shipLocations4.add("C10");
 
 			//---SHIPS
-			Ship ship1 = new Ship(gamePlayer1, shipLocations1, "destructor");
-			Ship ship2 = new Ship(gamePlayer2, shipLocations2, "cruiser");
-			Ship ship3 = new Ship(gamePlayer1, shipLocations3, "submarine");
+			Ship ship1 = new Ship(gamePlayer1, shipLocations1, "Destructor"); //Game 1 -> Player 1
+			Ship ship2 = new Ship(gamePlayer1, shipLocations3, "Submarine");  //Game 1 -> Player 1
+			Ship ship3 = new Ship(gamePlayer2, shipLocations2, "Cruiser");    //Game 1 -> Player 3
+			Ship ship4 = new Ship(gamePlayer2, shipLocations4, "Patrol Boat");    //Game 1 -> Player 3
+
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
+			shipRepository.save(ship4);
 
 
 		};
