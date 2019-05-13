@@ -46,7 +46,8 @@ public class SalvoApplication {
 	@Bean
 	public CommandLineRunner initData3
 			(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository,
-			 PlayerRepository playerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository) {
+             PlayerRepository playerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository,
+             ScoreRepository scoreRepository) {
 		return (args) -> {
 
 			//-- DATES
@@ -123,43 +124,49 @@ public class SalvoApplication {
 			shipRepository.save(ship4);
 
 			//--LOCATIONS SALVOES
-			List<String> salvoesLocation1 = new ArrayList<>();
-			salvoesLocation1.add("D4");
-			salvoesLocation1.add("H2");
-			salvoesLocation1.add("F5");
-
-			List<String> salvoesLocation2 = new ArrayList<>();
-			salvoesLocation2.add("A10");
-			salvoesLocation2.add("H4");
-			salvoesLocation2.add("H2");
-
-			List<String> salvoesLocation3 = new ArrayList<>();
-			salvoesLocation3.add("C10");
-
-			List<String> salvoesLocation4 = new ArrayList<>();
-			salvoesLocation4.add("H3");
-
-			List<String> salvoesLocation5 = new ArrayList<>();
-			salvoesLocation5.add("F6");
-
-			List<String> salvoesLocation6 = new ArrayList<>();
-			salvoesLocation6.add("D4");
-
-
+			List<String> salvoLocation1 = new ArrayList<>();
+			salvoLocation1.add("D4");
+			salvoLocation1.add("H2");
+			salvoLocation1.add("F5");
+			List<String> salvoLocation2 = new ArrayList<>();
+			salvoLocation2.add("A10");
+			salvoLocation2.add("H4");
+			salvoLocation2.add("H2");
+			List<String> salvoLocation3 = new ArrayList<>();
+			salvoLocation3.add("C10");
+			List<String> salvoLocation4 = new ArrayList<>();
+			salvoLocation4.add("H3");
+			List<String> salvoLocation5 = new ArrayList<>();
+			salvoLocation5.add("F6");
+			List<String> salvoLocation6 = new ArrayList<>();
+			salvoLocation6.add("D4");
 
 			//-- SALVOES
-			Salvo salvo1 = new Salvo(gamePlayer1, "1", salvoesLocation1);
-			Salvo salvo2 = new Salvo(gamePlayer2, "1", salvoesLocation2);
-			Salvo salvo3 = new Salvo(gamePlayer1, "2", salvoesLocation3);
-			Salvo salvo4 = new Salvo(gamePlayer2, "2", salvoesLocation4);
-			Salvo salvo5 = new Salvo(gamePlayer1, "3", salvoesLocation5);
-			Salvo salvo6 = new Salvo(gamePlayer2, "3", salvoesLocation6);
+			Salvo salvo1 = new Salvo(gamePlayer1, "1", salvoLocation1);
+			Salvo salvo2 = new Salvo(gamePlayer2, "1", salvoLocation2);
+			Salvo salvo3 = new Salvo(gamePlayer1, "2", salvoLocation3);
+			Salvo salvo4 = new Salvo(gamePlayer2, "2", salvoLocation4);
+			Salvo salvo5 = new Salvo(gamePlayer1, "3", salvoLocation5);
+			Salvo salvo6 = new Salvo(gamePlayer2, "3", salvoLocation6);
 			salvoRepository.save(salvo1);
 			salvoRepository.save(salvo2);
 			salvoRepository.save(salvo3);
 			salvoRepository.save(salvo4);
 			salvoRepository.save(salvo5);
 			salvoRepository.save(salvo6);
+
+			//-- SCORES
+			float win = (float)1;
+			float lose = 0;
+			float tie = (float)0.5;
+
+			Score score1 = new Score(game1, player1, win, date2);
+			Score score2 = new Score(game1, player2, lose, date2);
+			Score score3 = new Score(game2, player3, tie, date2);
+			scoreRepository.save(score1);
+			scoreRepository.save(score2);
+			scoreRepository.save(score3);
+
 
 
 		};

@@ -23,6 +23,9 @@ public class Game {
     private //el mappedBy coincide con atributo Game game de GamePlayer
             Set<GamePlayer> gamePlayers;
 
+    @OneToMany(mappedBy = "score", fetch = FetchType.EAGER)
+    private Set<Score> scores;
+
     public Game(){}
 
     public Game(Date dateGame){
@@ -46,6 +49,11 @@ public class Game {
         getGamePlayers().add(gamePlayer);
     }
 
+    public void addScore(Score score) {
+        score.setGame(this);
+        getScores().add(score);
+    }
+
     @JsonIgnore
     public List<Player> getPlayers() {
         return getGamePlayers().stream().map(sub -> sub.getPlayer()).collect(toList());
@@ -57,5 +65,14 @@ public class Game {
 
     public void setGamePlayers(Set<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
+    }
+
+    @JsonIgnore
+    public Set<Score> getScores() {
+        return scores;
+    }
+
+    public void setScores(Set<Score> scores) {
+        this.scores = scores;
     }
 }
