@@ -126,11 +126,20 @@ public class SalvoApplication {
 			List<String> salvoesLocation1 = new ArrayList<>();
 			salvoesLocation1.add("D4");
 			salvoesLocation1.add("H2");
-			salvoesLocation1.add("E4");
+			salvoesLocation1.add("F5");
+
+			List<String> salvoesLocation2 = new ArrayList<>();
+			salvoesLocation2.add("A10");
+			salvoesLocation2.add("H4");
+
+
 
 			//-- SALVOES
 			Salvo salvo1 = new Salvo(gamePlayer1, "1", salvoesLocation1);
+			Salvo salvo2 = new Salvo(gamePlayer2, "2", salvoesLocation2);
 			salvoRepository.save(salvo1);
+			salvoRepository.save(salvo2);
+
 
 		};
 	}

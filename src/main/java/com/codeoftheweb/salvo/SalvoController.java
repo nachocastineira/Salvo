@@ -47,12 +47,26 @@ public class SalvoController {
         return dto;
     }
 
+    public List<Object> getPlayerList(Set<Player> players){
+        return players
+                .stream()
+                .map(player -> playerDTO(player))
+                .collect(Collectors.toList());
+    }
+
+    private Map<String, Object> playerDTO(Player player){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", player.getId());
+        dto.put("email", player.getEmail());
+        return dto;
+    }
 
     public Map<String, Object> salvoDTO(Salvo salvo){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", salvo.getId());
         dto.put("turn", salvo.getTurn());
-        dto.put("locations", salvo.getSalvcLocations());
+        dto.put("player", salvo.getGamePlayer().getPlayer().getId());
+        dto.put("locations", salvo.getLocations());
         return dto;
     }
 
@@ -78,4 +92,3 @@ public class SalvoController {
     }
 
 }
-
