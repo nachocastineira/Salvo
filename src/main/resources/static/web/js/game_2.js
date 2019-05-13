@@ -22,8 +22,11 @@ function loadData() {
 
       data.ships.forEach(function (shipPiece) {
         shipPiece.locations.forEach(function (shipLocation) {
-          if(isHit(shipLocation,data.salvoes,playerInfo[0].id))
+          let turnHitted = isHit(shipLocation,data.salvoes,playerInfo[0].id);
+          if(turnHitted > 0){
             $('#B_' + shipLocation).addClass('ship-piece-hited');
+            $('#B_' + shipLocation).text(turnHitted);
+          }
           else
             $('#B_' + shipLocation).addClass('ship-piece');
         });
@@ -46,12 +49,12 @@ function loadData() {
 }
 
 function isHit(shipLocation,salvoes,playerId) {
-  var hit = false;
+  var hit = 0;
   salvoes.forEach(function (salvo) {
     if(salvo.player != playerId)
       salvo.locations.forEach(function (location) {
         if(shipLocation === location)
-          hit = true;
+          hit = salvo.turn;
       });
   });
   return hit;
