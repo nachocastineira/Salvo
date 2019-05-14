@@ -16,7 +16,7 @@ public class Player {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private String email;
+    private String username;
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     private //el mappedBy coincide con atributo Player player de GamePlayer
@@ -25,22 +25,25 @@ public class Player {
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<Score> scores;
 
+    private String password;
+
     public Player() { }
 
-    public Player(String mail) {
-        this.email = mail;
+    public Player(String mail, String password) {
+        this.username = mail;
+        this.password = password;
     }
 
     public Long getId() {
         return id;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUsername() {
+        return username;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUsername(String username) {
+        this.username = username;
     }
 
     public Set<GamePlayer> getGamePlayers() {
@@ -75,6 +78,13 @@ public class Player {
         this.scores = scores;
     }
 
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
+    }
 
     public double getScoreTotal(Player player){
         return getWins(player.getScores())*1

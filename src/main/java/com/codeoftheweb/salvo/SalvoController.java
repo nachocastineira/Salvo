@@ -135,14 +135,14 @@ public class SalvoController {
     private Map<String, Object> playerDTO(Player player){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
-        dto.put("name", player.getEmail());
+        dto.put("name", player.getUsername());
         dto.put("score", leadersBoardDTO(player));
         return dto;
     }
 
 //    public Map<String,Object> makeScoreList(Player player){
 //        Map<String, Object> dto = new LinkedHashMap<>();
-//        dto.put("name", player.getEmail());
+//        dto.put("name", player.getUsername());
 //        dto.put("total", player.getScoreTotal(player));
 //        dto.put("won", player.getWins(player.getScores()));
 //        dto.put("lost", player.getLost(player.getScores()));
@@ -162,7 +162,7 @@ public class SalvoController {
     }
     private Map<String, Object> leadersBoardDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("name", player.getEmail());
+        dto.put("name", player.getUsername());
         dto.put("total", player.getScoreTotal(player));
         dto.put("won", player.getWins(player.getScores()));
         dto.put("lost", player.getLost(player.getScores()));

@@ -2,8 +2,18 @@ package com.codeoftheweb.salvo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -11,37 +21,12 @@ import java.util.List;
 
 
 @SpringBootApplication
-public class SalvoApplication {
+public class SalvoApplication extends SpringBootServletInitializer {
 
 	public static void main(String[] args) {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
-/*	@Bean
-	public CommandLineRunner initData1(GameRepository gameRepository, PlayerRepository playerRepository, GamePlayerRepository gamePlayerRepository) {
-		return (args) -> {
-			playerRepository.save(new Player("Jack15", "jackj@mail.com"));
-			playerRepository.save(new Player("Luck39", "luckj@mail.com"));
-		};
-	}
-
-	@Bean
-	public CommandLineRunner initData2(GameRepository gameRepository) {
-		return (args) -> {
-
-			Date date1 = new Date();
-			date1 = Date.from(date1.toInstant());
-			gameRepository.save(new Game(date1)); //Fecha al momento de crear objeto
-
-			Date date2 = new Date();
-			date2 = Date.from(date2.toInstant().plusSeconds(3600)); //.plusSecond para sumarle 1Hs a la actual
-			gameRepository.save(new Game(date2)); //Fecha con 1 hora mas tarde
-
-			Date date3 = new Date();
-			date3 = Date.from(date3.toInstant().plusSeconds(7200));
-			gameRepository.save(new Game(date3)); //Fecha con 2 horas mas tarde
-		};
-	}*/
 
 	@Bean
 	public CommandLineRunner initData3
@@ -68,15 +53,14 @@ public class SalvoApplication {
 			gameRepository.save(game3);
 
 			//-- PLAYERS
-			Player player1 = new Player();
-			player1.setEmail("lucas_p1@gmail.com");
-			Player player2 = new Player();
-			player2.setEmail("jorge_p2@hotmail.com");
-			Player player3 = new Player();
-			player3.setEmail("jack_p3@outlook.com");
+			Player player1 = new Player("j.bauer@ctu.gov", "24");
+			Player player2 = new Player("c.obrian@ctu.gov", "42");
+			Player player3 = new Player("kim_bauer@gmail.com", "kb");
+			Player player4 = new Player("t.almeida@ctu.gov", "mole");
 			playerRepository.save(player1);
 			playerRepository.save(player2);
 			playerRepository.save(player3);
+			playerRepository.save(player4);
 
 
 			//-- GAMEPLAYERS
@@ -176,4 +160,45 @@ public class SalvoApplication {
 
 		};
 	}
+}
+
+
+@Configuration
+class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
+
+
+	@Bean
+	public UserDetailsService loadUserByUsername() {
+		UserDetails user =
+				User.withDefaultPasswordEncoder()
+						.username("user")
+						.password("password")
+						.roles("USER")
+						.build();
+
+		return new InMemoryUserDetailsManager(user);
+	}
+}
+
+
+@EnableWebSecurity
+@Configuration
+class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
+	@Override
+	protected void configure(HttpSecurity http) throws Exception {
+		http
+				.authorizeRequests()
+				.antMatchers("/rest").permitAll()
+				.antMatchers("/").permitAll()
+				.and()
+				.formLogin();
+//				.loginPage("/")
+//				.permitAll();
+//				.and()
+//				.logout()
+//				.permitAll();
+	}
+
+
 }
