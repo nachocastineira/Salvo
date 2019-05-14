@@ -22,7 +22,7 @@ public class Player {
     private //el mappedBy coincide con atributo Player player de GamePlayer
     Set<GamePlayer> gamePlayers;
 
-    @OneToMany(mappedBy = "score", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private Set<Score> scores;
 
     public Player() { }
@@ -76,19 +76,21 @@ public class Player {
     }
 
 
-    public float getScoreTotal(Player player){
-        return player.getWins(player.getScores())*1 + player.getLost(player.getScores())*0 + player.getTied(player.getScores())*(float)0.5;
+    public double getScoreTotal(Player player){
+        return getWins(player.getScores())*1
+                + getLost(player.getScores())*0
+                + getTied(player.getScores())*(float)0.5;
     }
 
-    public float getWins(Set<Score> scores){
+    public long getWins(Set<Score> scores){
         return scores.stream().filter(score -> score.getScore() == 1).count();
     }
 
-    public float getLost(Set<Score> scores){
+    public long getLost(Set<Score> scores){
         return scores.stream().filter(score -> score.getScore() == 0).count();
     }
 
-    public float getTied(Set<Score> scores){
-        return scores.stream().filter(score -> score.getScore() == (float)0.5).count();
+    public long getTied(Set<Score> scores){
+        return scores.stream().filter(score -> score.getScore() == 0.5).count();
     }
 }

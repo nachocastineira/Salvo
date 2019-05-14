@@ -156,18 +156,23 @@ public class SalvoApplication {
 			salvoRepository.save(salvo6);
 
 			//-- SCORES
-			float win = (float)1;
-			float lose = 0;
-			float tie = (float)0.5;
+/*			float win = 1;
+			float tied = (float)0.5;
+			float lost = 0;*/
 
-			Score score1 = new Score(game1, player1, win, date2);
-			Score score2 = new Score(game1, player2, lose, date2);
-			Score score3 = new Score(game2, player3, tie, date2);
+			Score score1 = new Score (game1, player1, 1, date);
+			Score score2 = new Score (game1, player2, 0.5, date);
+			Score score3 = new Score (game2, player2, 0.5, date);
+			Score score4 = new Score (game2, player3, 1, date);
+			Score score5 = new Score (game3, player3, 0.5, date);
+			Score score6 = new Score (game3, player1, 0.5, date);
+
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);
 			scoreRepository.save(score3);
-
-
+			scoreRepository.save(score4);
+			scoreRepository.save(score5);
+			scoreRepository.save(score6);
 
 		};
 	}
