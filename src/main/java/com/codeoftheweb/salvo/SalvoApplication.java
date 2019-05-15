@@ -1,19 +1,22 @@
 package com.codeoftheweb.salvo;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.web.servlet.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.authentication.configuration.GlobalAuthenticationConfigurerAdapter;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.core.authority.AuthorityUtils;
 import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -157,29 +160,35 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			scoreRepository.save(score4);
 			scoreRepository.save(score5);
 			scoreRepository.save(score6);
-
 		};
+	}
+
+	@Bean
+	public PasswordEncoder passwordEncoder() {
+		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 }
 
-
+//para autenticar el usuario
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
+	@Autowired
+	PlayerRepository playerRepository;
 
-	@Bean
-	public UserDetailsService loadUserByUsername() {
-		UserDetails user =
-				User.withDefaultPasswordEncoder()
-						.username("user")
-						.password("password")
-						.roles("USER")
-						.build();
-
-		return new InMemoryUserDetailsManager(user);
+	@Override
+	public void init (AuthenticationManagerBuilder auth) throws Exception{
+		auth.userDetailsService(inputName->{
+			Player player = playerRepository.findByUsername(inputName);
+			if (player != null) {
+				return new User(player.getUsername(), player.getPassword(),
+						AuthorityUtils.createAuthorityList("USER"));
+			} else {
+				throw new UsernameNotFoundException("Unknown player: " + inputName);
+			}
+		});
 	}
 }
-
 
 @EnableWebSecurity
 @Configuration
@@ -189,16 +198,9 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http
 				.authorizeRequests()
-				.antMatchers("/rest").permitAll()
-				.antMatchers("/").permitAll()
-				.and()
+					.antMatchers( "/rest").permitAll()
+					.anyRequest().fullyAuthenticated()
+					.and()
 				.formLogin();
-//				.loginPage("/")
-//				.permitAll();
-//				.and()
-//				.logout()
-//				.permitAll();
 	}
-
-
 }

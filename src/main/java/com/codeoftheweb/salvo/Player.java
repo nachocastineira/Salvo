@@ -15,7 +15,7 @@ public class Player {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
-    private Long id;
+    private long id;
     private String username;
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
@@ -34,7 +34,7 @@ public class Player {
         this.password = password;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
@@ -103,4 +103,6 @@ public class Player {
     public long getTied(Set<Score> scores){
         return scores.stream().filter(score -> score.getScore() == 0.5).count();
     }
+
+
 }

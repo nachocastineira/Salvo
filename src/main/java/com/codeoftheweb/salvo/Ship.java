@@ -16,11 +16,11 @@ public class Ship {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "gameplayer_id")
+    @JoinColumn(name = "gamePlayer_id")
     private GamePlayer gamePlayer;
 
     @ElementCollection
-    @Column(name = "Locations")
+    @Column(name = "locations")
     private List<String> locations = new ArrayList<>();
 
     private String type;

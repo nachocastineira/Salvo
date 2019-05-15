@@ -15,13 +15,13 @@ public class Salvo {
     private Long id;
 
     @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "gameplayer_id")
+    @JoinColumn(name = "gamePlayer_id")
     private GamePlayer gamePlayer;
 
     private String turn;
 
     @ElementCollection
-    @Column(name = "SalvoLocations")
+    @Column(name = "locations")
     private List<String> locations = new ArrayList<>();
 
     public Salvo(){}
