@@ -1,12 +1,17 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import  org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.crypto.factory.PasswordEncoderFactories;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -20,6 +25,10 @@ public class SalvoController {
 
     @Autowired
     private PlayerRepository playerRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
 
     @RequestMapping("/games")
     public Map<String, Object> makeLoggedPlayer(Authentication authentication){
@@ -188,4 +197,23 @@ public class SalvoController {
         dto.put("tied", player.getTied(player.getScores()));
         return dto;
     }
+
+    @RequestMapping(path = "/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> register (@RequestParam String username, @RequestParam String password){
+
+
+        if (username.isEmpty() || password.isEmpty()) {
+            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+        }
+
+        if (playerRepository.findByUsername(username) !=  null) {
+            return new ResponseEntity<>("El username ("+username+") se encuentra ocupado.", HttpStatus.FORBIDDEN);
+        }
+
+        playerRepository.save(new Player(username,  passwordEncoder.encode(password)));
+        return new ResponseEntity<>(HttpStatus.CREATED);
+
+    }
+
+
 }
