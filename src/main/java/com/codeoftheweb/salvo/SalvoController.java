@@ -1,6 +1,9 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.authentication.AnonymousAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import  org.springframework.web.bind.annotation.RestController;
@@ -15,14 +18,43 @@ public class SalvoController {
     @Autowired
     private GameRepository gameRepository;
 
+    @Autowired
+    private PlayerRepository playerRepository;
+
     @RequestMapping("/games")
-    public  List<Object> getAll(){
+    public Map<String, Object> makeLoggedPlayer(Authentication authentication){
+        Map<String, Object> dto = new LinkedHashMap<>();
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+        if(authenticatedPlayer == null) {
+            dto.put("player", "Guest");
+        }
+        else {
+            dto.put("player", loggedPlayerDTO(authenticatedPlayer));
+        }
+        dto.put("games", getGames());
+
+        return dto;
+    }
+
+    private Player getAuthentication(Authentication authentication) {
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken){
+            return null;
+        }
+        else {
+            return (playerRepository.findByUsername(authentication.getName()));
+        }
+    }
+
+
+    public  List<Object> getGames(){
         return gameRepository
                 .findAll()
                 .stream()
                 .map(game -> gameDTO(game)) //devuelvo un solo map con dos registros {1 juego -> 2 jugadores}
                 .collect(Collectors.toList());
     }
+
 
     public List<Object> getGamesList(List<Game> games){
         return games
@@ -120,17 +152,6 @@ public class SalvoController {
         return dto;
     }
 
-//    @Autowired
-//    private PlayerRepository playerRepository;
-//
-//    @RequestMapping("/leaderBoard")
-//    public List<Object> makeLeaderBoard(){
-//        return playerRepository
-//                .findAll()
-//                .stream()
-//                .map(player -> playerDTO(player))
-//                .collect(Collectors.toList());
-//    }
 
     private Map<String, Object> playerDTO(Player player){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
@@ -140,15 +161,13 @@ public class SalvoController {
         return dto;
     }
 
-//    public Map<String,Object> makeScoreList(Player player){
-//        Map<String, Object> dto = new LinkedHashMap<>();
-//        dto.put("name", player.getUsername());
-//        dto.put("total", player.getScoreTotal(player));
-//        dto.put("won", player.getWins(player.getScores()));
-//        dto.put("lost", player.getLost(player.getScores()));
-//        dto.put("tied", player.getTied(player.getScores()));
-//        return dto;
-//    }
+    private Map<String, Object> loggedPlayerDTO(Player player){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("id", player.getId());
+        dto.put("name", player.getUsername());
+        return dto;
+    }
+
 
     @Autowired
     PlayerRepository playerRepo;
