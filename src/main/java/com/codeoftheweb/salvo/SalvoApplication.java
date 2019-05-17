@@ -209,7 +209,8 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/web/games_3.html").permitAll()
 				.antMatchers("/web/**").permitAll()
                 .antMatchers("/api/players").permitAll()
-                .antMatchers("/api/games").permitAll()
+				.antMatchers("/api/games").permitAll()
+				.antMatchers("/api/**").permitAll()
 				.antMatchers("/api/game_view/*").hasAuthority("user")
 				.antMatchers("/rest/").denyAll()
                 .anyRequest().permitAll();

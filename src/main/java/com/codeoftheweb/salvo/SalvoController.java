@@ -150,7 +150,6 @@ public class SalvoController {
         dto.put("id", gamePlayer.getGame().getId());
         dto.put("created", gamePlayer.getGame().getCreated());
         dto.put("gamePlayers", getGamePlayersLista(gamePlayer.getGame().getGamePlayers()));
-//        dto.put("games", getGamesList(gamePlayer.getGame()));
         dto.put("ships", gamePlayer.getShips());
         dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream()
                 .flatMap(gamePlayer1 -> gamePlayer1.getSalvoes().stream().map(salvo -> salvoDTO (salvo))));
@@ -213,15 +212,26 @@ public class SalvoController {
 
     }
 
+    //crea nuevo game con gamePlayer, se le asigna al usuario logueado --> (variables de sesion)
     @RequestMapping(path = "/games", method = RequestMethod.POST)
-    public ResponseEntity<Object> newGame (){
+    public ResponseEntity<Object> newGame (Authentication authentication){
 
-        Date dateNow = new Date();
-        dateNow = Date.from(dateNow.toInstant());
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
 
-        gameRepository.save(new Game(dateNow));
+        if(authenticatedPlayer == null){
+            return new ResponseEntity<>("No name given", HttpStatus.FORBIDDEN);
+        }
+        else {
+            Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
 
-        return new ResponseEntity<>(HttpStatus.CREATED);
+            Game newGame = new Game(date);
+            gameRepository.save(newGame);
+
+            GamePlayer newGamePlayer = new GamePlayer(newGame, authenticatedPlayer);
+             gamePlayerRepository.save(newGamePlayer);
+
+            return new ResponseEntity<>("Game Created", HttpStatus.CREATED);        }
     }
 
 
