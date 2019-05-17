@@ -263,7 +263,7 @@ function getPlayers(gamesData) {
                     playersIds.push(gamesData[i].gamePlayers[j].player.id);
                     let playerScoreData = {
                         "id": gamesData[i].gamePlayers[j].player.id,
-                        "email": gamesData[i].gamePlayers[j].player.name,
+                        "username": gamesData[i].gamePlayers[j].player.username,
                         "scores": [],
                         "total": 0.0
                     };
@@ -320,7 +320,7 @@ function showScoreBoard(playersArray) {
             }
 
             let row = $('<tr></tr>').appendTo(table);
-            $("<td class='textCenter'>" + playersArray[m].name + '</td>').appendTo(row);
+            $("<td class='textCenter'>" + playersArray[m].username + '</td>').appendTo(row);
             $("<td class='textCenter'>" + playersArray[m].total.toFixed(1) + '</td>').appendTo(row);
             $("<td class='textCenter'>" + countWon + '</td>').appendTo(row);
             $("<td class='textCenter'>" + countLost + '</td>').appendTo(row);

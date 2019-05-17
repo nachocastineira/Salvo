@@ -53,7 +53,6 @@ public class SalvoController {
         }
     }
 
-
     public  List<Object> getGames(){
         return gameRepository
                 .findAll()
@@ -61,14 +60,13 @@ public class SalvoController {
                 .map(game -> gameDTO(game)) //devuelvo un solo map con dos registros {1 juego -> 2 jugadores}
                 .collect(Collectors.toList());
     }
-
-
+/*
     public List<Object> getGamesList(List<Game> games){
         return games
                 .stream()
                 .map(game -> gameDTO(game))
                 .collect(Collectors.toList());
-    }
+    }*/
 
     public Map<String, Object> gameDTO(Game game) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
@@ -78,7 +76,6 @@ public class SalvoController {
         dto.put("scores", getScoreLista(game.getScores()));
         return dto;
     }
-
 
         public List<Object> getScoreLista(Set<Score> scores){
         return scores.stream().map(score -> scoreDTO(score)).collect(Collectors.toList());
@@ -104,7 +101,7 @@ public class SalvoController {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("shipType", ship.getType());
         dto.put("shipLocations", ship.getLocations());
-        dto.put("player", ship.getGamePlayer().getPlayer().getId());
+//        dto.put("player", ship.getGamePlayer().getPlayer().getId());
         return dto;
     }
 
@@ -118,26 +115,38 @@ public class SalvoController {
 
     public Map<String, Object> salvoDTO(Salvo salvo){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", salvo.getId());
+//        dto.put("id", salvo.getId());
         dto.put("turn", salvo.getTurn());
         dto.put("player", salvo.getGamePlayer().getPlayer().getId());
         dto.put("locations", salvo.getLocations());
         return dto;
     }
 
+    private List<Map<String, Object>> makeSalvoList(List<Salvo> salvoes) {
+        return salvoes
+                .stream()
+                .map(salvo -> salvoDTO(salvo))
+                .collect(Collectors.toList());
+    }
+
 
     public Map<String, Object> scoreDTO(Score score){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("player", score.getPlayer().getGamePlayers());
+        dto.put("playerID", score.getPlayer().getId());
         dto.put("score", score.getScore());
         dto.put("finishDate", score.getFinishDate());
         return dto;
     }
 
+    private List<Map<String,Object>> getSalvoList(Game game) {
+        List<Map<String,Object>> myList = new ArrayList<>();
+        game.getGamePlayers().forEach(gamePlayer -> myList.addAll(makeSalvoList(gamePlayer.getSalvoes())));
+        return myList;
+    }
 
-    @Autowired
+
+        @Autowired
     private GamePlayerRepository gamePlayerRepository;
-
 
 
     @RequestMapping("/game_view/{id}")
@@ -162,8 +171,8 @@ public class SalvoController {
     private Map<String, Object> playerDTO(Player player){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
-        dto.put("name", player.getUsername());
-        dto.put("score", leadersBoardDTO(player));
+        dto.put("username", player.getUsername());
+        dto.put("score", getScoreList(player));
         return dto;
     }
 
@@ -185,19 +194,28 @@ public class SalvoController {
                 .map(player -> playerDTO(player))
                 .collect(Collectors.toList());
     }
-    private Map<String, Object> leadersBoardDTO(Player player) {
+
+
+    private Map<String, Object> playerLeaderBoardDTO(Player player) {
+        Map<String, Object> dto = new LinkedHashMap<>();
+        dto.put("id", player.getId());
+        dto.put("name", player.getUsername());
+        dto.put("score", getScoreList(player));
+        return dto;
+    }
+
+    private Map<String, Object> getScoreList(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("name", player.getUsername());
         dto.put("total", player.getScoreTotal(player));
         dto.put("won", player.getWins(player.getScores()));
-        dto.put("lost", player.getLost(player.getScores()));
-        dto.put("tied", player.getTied(player.getScores()));
+        dto.put("lost", player.getLoses(player.getScores()));
+        dto.put("tied", player.getDraws(player.getScores()));
         return dto;
     }
 
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register (@RequestParam String username, @RequestParam String password){
-
 
         if (username.isEmpty() || password.isEmpty()) {
             return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
@@ -206,10 +224,9 @@ public class SalvoController {
         if (playerRepository.findByUsername(username) !=  null) {
             return new ResponseEntity<>("El username ("+username+") se encuentra ocupado.", HttpStatus.FORBIDDEN);
         }
-
         playerRepository.save(new Player(username,  passwordEncoder.encode(password)));
-        return new ResponseEntity<>(HttpStatus.CREATED);
 
+        return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
     //crea nuevo game con gamePlayer, se le asigna al usuario logueado --> (variables de sesion)
@@ -231,7 +248,8 @@ public class SalvoController {
             GamePlayer newGamePlayer = new GamePlayer(newGame, authenticatedPlayer);
              gamePlayerRepository.save(newGamePlayer);
 
-            return new ResponseEntity<>("Game Created", HttpStatus.CREATED);        }
+            return new ResponseEntity<>("Game Created", HttpStatus.CREATED);
+        }
     }
 
 

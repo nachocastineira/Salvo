@@ -106,10 +106,16 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipLocations4.add("C10");
 
 			//---SHIPS
-			Ship ship1 = new Ship(gamePlayer1, shipLocations1, "Destructor"); //Game 1 -> Player 1
-			Ship ship2 = new Ship(gamePlayer1, shipLocations3, "Submarine");  //Game 1 -> Player 1
-			Ship ship3 = new Ship(gamePlayer2, shipLocations2, "Cruiser");    //Game 1 -> Player 3
-			Ship ship4 = new Ship(gamePlayer2, shipLocations4, "Patrol Boat");    //Game 1 -> Player 3
+			String shipType1 = "Carrier";//length = 5
+			String shipType2 = "Battleship"; //length = 4
+			String shipType3 = "Submarine"; //length = 3
+			String shipType4 = "Destroyer"; //length = 3
+			String shipType5 = "Patrol Boat"; //length = 2
+
+			Ship ship1 = new Ship(gamePlayer1, shipLocations1, shipType2); //Game 1 -> Player 1
+			Ship ship2 = new Ship(gamePlayer1, shipLocations3, shipType4);  //Game 1 -> Player 1
+			Ship ship3 = new Ship(gamePlayer2, shipLocations2, shipType3);    //Game 1 -> Player 3
+			Ship ship4 = new Ship(gamePlayer2, shipLocations4, shipType5);    //Game 1 -> Player 3
 			shipRepository.save(ship1);
 			shipRepository.save(ship2);
 			shipRepository.save(ship3);
@@ -148,16 +154,16 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoRepository.save(salvo6);
 
 			//-- SCORES
-/*			float win = 1;
-			float tied = (float)0.5;
-			float lost = 0;*/
+			float win = 1;
+			float tie  = (float)0.5;
+			float lose = 0;
 
-			Score score1 = new Score (game1, player1, 1, date);
-			Score score2 = new Score (game1, player2, 0.5, date);
-			Score score3 = new Score (game2, player2, 0.5, date);
-			Score score4 = new Score (game2, player3, 1, date);
-			Score score5 = new Score (game3, player3, 0.5, date);
-			Score score6 = new Score (game3, player1, 0.5, date);
+			Score score1 = new Score (game1, player1, win, date);
+			Score score2 = new Score (game1, player2, win, date);
+			Score score3 = new Score (game2, player2, win , date);
+			Score score4 = new Score (game2, player3, tie, date);
+			Score score5 = new Score (game3, player3, win , date);
+			Score score6 = new Score (game3, player1, tie , date);
 
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);
@@ -190,7 +196,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 			Player player = playerRepository.findByUsername(inputName);
 			if (player != null) {
 				return new User(player.getUsername(), player.getPassword(),
-						AuthorityUtils.createAuthorityList("USER"));
+						AuthorityUtils.createAuthorityList("user"));
 			} else {
 				throw new UsernameNotFoundException("Unknown player: " + inputName);
 			}
@@ -210,7 +216,7 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.antMatchers("/web/**").permitAll()
                 .antMatchers("/api/players").permitAll()
 				.antMatchers("/api/games").permitAll()
-				.antMatchers("/api/**").permitAll()
+				.antMatchers("/api/leaderBoard").permitAll()
 				.antMatchers("/api/game_view/*").hasAuthority("user")
 				.antMatchers("/rest/").denyAll()
                 .anyRequest().permitAll();

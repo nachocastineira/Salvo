@@ -39,7 +39,7 @@ function isPlayerInGame(idPlayer,gameData){
 
 function updateViewLBoard(data) {
   var htmlList = data.map(function (score) {
-      return  '<tr><td>' + score.name + '</td>'
+      return  '<tr><td>' + score.username + '</td>'
               + '<td>' + score.score.total + '</td>'
               + '<td>' + score.score.won + '</td>'
               + '<td>' + score.score.lost + '</td>'

@@ -23,7 +23,7 @@ public class Player {
     Set<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
-    private Set<Score> scores;
+    private List<Score> scores;
 
     private String password;
 
@@ -70,11 +70,11 @@ public class Player {
     }
 
     @JsonIgnore
-    public Set<Score> getScores() {
+    public List<Score> getScores() {
         return scores;
     }
 
-    public void setScores(Set<Score> scores) {
+    public void setScores(List<Score> scores) {
         this.scores = scores;
     }
 
@@ -86,21 +86,21 @@ public class Player {
         this.password = password;
     }
 
-    public double getScoreTotal(Player player){
+    public float getScoreTotal(Player player){
         return getWins(player.getScores())*1
-                + getLost(player.getScores())*0
-                + getTied(player.getScores())*(float)0.5;
+                + getDraws(player.getScores())*((float)0.5)
+                + getLoses(player.getScores())*0;
     }
 
-    public long getWins(Set<Score> scores){
+    public float getWins(List<Score> scores){
         return scores.stream().filter(score -> score.getScore() == 1).count();
     }
 
-    public long getLost(Set<Score> scores){
+    public float getLoses(List<Score> scores){
         return scores.stream().filter(score -> score.getScore() == 0).count();
     }
 
-    public long getTied(Set<Score> scores){
+    public float getDraws(List<Score> scores){
         return scores.stream().filter(score -> score.getScore() == 0.5).count();
     }
 
