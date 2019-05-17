@@ -34,14 +34,14 @@ public class GamePlayer {
     private
     Set<Salvo> salvoes;
 
-    private Date joinDate;
+    private Date created;
 
     public  GamePlayer(){}
 
     public GamePlayer(Game game, Player player) {
         this.game = game;
         this.player = player;
-        this.joinDate = new Date();
+        this.created = new Date();
     }
 
     public Long getId() {
@@ -66,8 +66,8 @@ public class GamePlayer {
         this.player = player;
     }
 
-    public Date getJoinDate() {
-        return joinDate;
+    public Date getCreated() {
+        return created;
     }
 
     public Set<Ship> getShips() {

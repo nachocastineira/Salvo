@@ -50,15 +50,15 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			date2 = Date.from(date2.toInstant().plusSeconds(6000));
 
 			//-- GAMES
-			Game game1 = new Game();
-			game1.setCreationDate(date);
-			Game game2 = new Game();
-			game2.setCreationDate(date2);
-			Game game3 = new Game();
-			game3.setCreationDate(date);
+			Game game1 = new Game(date);
+			Game game2 = new Game(date2);
+			Game game3 = new Game(date);
+			Game game4 = new Game(date);
 			gameRepository.save(game1);
 			gameRepository.save(game2);
 			gameRepository.save(game3);
+			gameRepository.save(game4);
+
 
 			//-- PLAYERS
 			Player player1 = new Player("j.bauer@ctu.gov", passwordEncoder().encode("24"));
@@ -74,18 +74,18 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//-- GAMEPLAYERS
 			GamePlayer gamePlayer1 = new GamePlayer(game1, player1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1, player3);
-//			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
-//			GamePlayer gamePlayer4 = new GamePlayer(game2, player2);
-//			GamePlayer gamePlayer5 = new GamePlayer(game1, player3);
-//			GamePlayer gamePlayer6 = new GamePlayer(game3, player2);
-//			GamePlayer gamePlayer7 = new GamePlayer(game1, player1);
+			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
+			GamePlayer gamePlayer4 = new GamePlayer(game2, player2);
+			GamePlayer gamePlayer5 = new GamePlayer(game3, player3);
+			GamePlayer gamePlayer6 = new GamePlayer(game3, player2);
+			GamePlayer gamePlayer7 = new GamePlayer(game4, player4);
 			gamePlayerRepository.save(gamePlayer1);
 			gamePlayerRepository.save(gamePlayer2);
-//			gamePlayerRepository.save(gamePlayer3);
-//			gamePlayerRepository.save(gamePlayer4);
-//			gamePlayerRepository.save(gamePlayer5);
-//			gamePlayerRepository.save(gamePlayer6);
-//			gamePlayerRepository.save(gamePlayer7);
+			gamePlayerRepository.save(gamePlayer3);
+			gamePlayerRepository.save(gamePlayer4);
+			gamePlayerRepository.save(gamePlayer5);
+			gamePlayerRepository.save(gamePlayer6);
+			gamePlayerRepository.save(gamePlayer7);
 
 			//--LOCATIONS SHIP
 			List<String> shipLocations1 = new ArrayList<>();
@@ -208,11 +208,10 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/web/games_3.html").permitAll()
 				.antMatchers("/web/**").permitAll()
-                .antMatchers("/web/games_3.html").permitAll()
                 .antMatchers("/api/players").permitAll()
                 .antMatchers("/api/games").permitAll()
-				.antMatchers("/api/game_view").permitAll()
-//                .antMatchers( "/rest/*").denyAll()
+				.antMatchers("/api/game_view/*").hasAuthority("user")
+				.antMatchers("/rest/").denyAll()
                 .anyRequest().permitAll();
 
 		http

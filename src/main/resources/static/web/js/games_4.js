@@ -21,10 +21,10 @@ function updateViewGames(data) {
 }
 
 function getGameItem(gameData, userData){
-    var item = '<li class="list-group-item">'+ new Date(gameData.crationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</li>';
+    var item = '<li class="list-group-item">'+ new Date(gameData.creationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.username}).join(', ')  +'</li>';
     var idPlayerInGame = isPlayerInGame(userData.id,gameData);
     if (idPlayerInGame != -1)
-        item = '<li class="list-group-item"><a href="game_2.html?gp='+ idPlayerInGame + '">'+ new Date(gameData.crationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.email}).join(', ')  +'</a></li>';
+        item = '<li class="list-group-item"><a href="game_2.html?gp='+ idPlayerInGame + '">'+ new Date(gameData.creationDate).toLocaleString() + ' ' + gameData.gamePlayers.map(function(p) { return p.player.username}).join(', ')  +'</a></li>';
     return item;
 }
 

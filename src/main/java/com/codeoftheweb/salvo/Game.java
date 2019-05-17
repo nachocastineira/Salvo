@@ -17,7 +17,7 @@ public class Game {
     @GeneratedValue(strategy = GenerationType.AUTO, generator = "native")
     @GenericGenerator(name = "native", strategy = "native")
     private Long id;
-    private Date creationDate;
+    private Date created;
 
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     private //el mappedBy coincide con atributo Game game de GamePlayer
@@ -29,19 +29,19 @@ public class Game {
     public Game(){}
 
     public Game(Date dateGame){
-        this.creationDate = dateGame;
+        this.created = dateGame;
     }
 
-    public Date getCreationDate() {
-        return creationDate;
+    public Date getCreated() {
+        return created;
     }
 
     public Long getId() {
         return id;
     }
 
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
+    public void setCreated(Date created) {
+        this.created = created;
     }
 
     public void addGamePlayer(GamePlayer gamePlayer) {

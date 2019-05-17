@@ -2,13 +2,11 @@ package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
-import org.springframework.context.annotation.Bean;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.crypto.factory.PasswordEncoderFactories;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
@@ -75,7 +73,7 @@ public class SalvoController {
     public Map<String, Object> gameDTO(Game game) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", game.getId());
-        dto.put("creationDate", game.getCreationDate().getTime());
+        dto.put("created", game.getCreated().getTime());
         dto.put("gamePlayers", getGamePlayersLista(game.getGamePlayers())); //obtengo todos los jugadores de ese juego, le mando los gamePlayer de ese juego
         dto.put("scores", getScoreLista(game.getScores()));
         return dto;
@@ -150,7 +148,7 @@ public class SalvoController {
     private Map<String,Object> gameViewDTO(GamePlayer gamePlayer){
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", gamePlayer.getGame().getId());
-        dto.put("created", gamePlayer.getGame().getCreationDate());
+        dto.put("created", gamePlayer.getGame().getCreated());
         dto.put("gamePlayers", getGamePlayersLista(gamePlayer.getGame().getGamePlayers()));
 //        dto.put("games", getGamesList(gamePlayer.getGame()));
         dto.put("ships", gamePlayer.getShips());
@@ -214,6 +212,19 @@ public class SalvoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
 
     }
+
+    @RequestMapping(path = "/games", method = RequestMethod.POST)
+    public ResponseEntity<Object> newGame (){
+
+        Date dateNow = new Date();
+        dateNow = Date.from(dateNow.toInstant());
+
+        gameRepository.save(new Game(dateNow));
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
+
 
 
 }
