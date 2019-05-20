@@ -60,13 +60,6 @@ public class SalvoController {
                 .map(game -> gameDTO(game)) //devuelvo un solo map con dos registros {1 juego -> 2 jugadores}
                 .collect(Collectors.toList());
     }
-/*
-    public List<Object> getGamesList(List<Game> games){
-        return games
-                .stream()
-                .map(game -> gameDTO(game))
-                .collect(Collectors.toList());
-    }*/
 
     public Map<String, Object> gameDTO(Game game) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
@@ -252,7 +245,33 @@ public class SalvoController {
         }
     }
 
+    @RequestMapping(path = "game/{id}/players", method = RequestMethod.POST)
+    public ResponseEntity<Object> joinGame (Authentication authentication, @PathVariable long id){
+
+        authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+
+        Game gameActual = gameRepository.findById(id).get();
+
+        if(authenticatedPlayer == null)
+            return new ResponseEntity<>("No such player", HttpStatus.UNAUTHORIZED);
+
+        if(gameActual == null)
+            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
+
+        //if para juego lleno (2 players)
+/*        if()
+            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);*/
+
+
+        else {
+            GamePlayer newGamePlayer = new GamePlayer(gameActual,authenticatedPlayer);
+            gamePlayerRepository.save(newGamePlayer);
+
+            return new ResponseEntity<>("Join Game", HttpStatus.CREATED);
+        }
+        }
+    }
 
 
 
-}
