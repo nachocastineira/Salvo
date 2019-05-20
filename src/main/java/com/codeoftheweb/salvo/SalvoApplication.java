@@ -159,11 +159,11 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			float lose = 0;
 
 			Score score1 = new Score (game1, player1, win, date);
-			Score score2 = new Score (game1, player2, win, date);
-			Score score3 = new Score (game2, player2, win , date);
+			Score score2 = new Score (game1, player2, lose, date);
+			Score score3 = new Score (game2, player2, tie , date);
 			Score score4 = new Score (game2, player3, tie, date);
 			Score score5 = new Score (game3, player3, win , date);
-			Score score6 = new Score (game3, player1, tie , date);
+			Score score6 = new Score (game3, player1, lose , date);
 
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);

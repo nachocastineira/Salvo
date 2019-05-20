@@ -23,7 +23,7 @@ public class Game {
     private //el mappedBy coincide con atributo Game game de GamePlayer
             Set<GamePlayer> gamePlayers;
 
-    @OneToMany(mappedBy = "score", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<Score> scores;
 
     public Game(){}

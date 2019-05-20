@@ -1,7 +1,6 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -9,10 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.*;
 import java.util.stream.Collectors;
-
 
 @RestController
 @RequestMapping("/api")
@@ -26,7 +23,6 @@ public class SalvoController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
-
 
     @RequestMapping("/games")
     public Map<String, Object> makeLoggedPlayer(Authentication authentication){
@@ -45,9 +41,9 @@ public class SalvoController {
     }
 
     private Player getAuthentication(Authentication authentication) {
-        if (authentication == null || authentication instanceof AnonymousAuthenticationToken){
+        if (authentication == null || authentication instanceof AnonymousAuthenticationToken)
             return null;
-        }
+
         else {
             return (playerRepository.findByUsername(authentication.getName()));
         }
@@ -70,9 +66,9 @@ public class SalvoController {
         return dto;
     }
 
-        public List<Object> getScoreLista(Set<Score> scores){
+    public List<Object> getScoreLista(Set<Score> scores){
         return scores.stream().map(score -> scoreDTO(score)).collect(Collectors.toList());
-        }
+    }
 
     //hago lo mismo que arriba pero itero los gamePlayers
     public List<Object> getGamePlayersLista(Set<GamePlayer> gamePlayers){
@@ -88,7 +84,6 @@ public class SalvoController {
         dto.put("player", gamePlayer.getPlayer());
         return dto;
     }
-
 
     private Map<String,Object> shipDTO(Ship ship){
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -122,7 +117,6 @@ public class SalvoController {
                 .collect(Collectors.toList());
     }
 
-
     public Map<String, Object> scoreDTO(Score score){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("playerID", score.getPlayer().getId());
@@ -137,10 +131,8 @@ public class SalvoController {
         return myList;
     }
 
-
-        @Autowired
+    @Autowired
     private GamePlayerRepository gamePlayerRepository;
-
 
     @RequestMapping("/game_view/{id}")
     public Map<String, Object> getGameView(@PathVariable long id){
@@ -160,7 +152,6 @@ public class SalvoController {
         return dto;
     }
 
-
     private Map<String, Object> playerDTO(Player player){
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
@@ -176,7 +167,6 @@ public class SalvoController {
         return dto;
     }
 
-
     @Autowired
     PlayerRepository playerRepo;
     @RequestMapping("/leaderBoard")
@@ -187,7 +177,6 @@ public class SalvoController {
                 .map(player -> playerDTO(player))
                 .collect(Collectors.toList());
     }
-
 
     private Map<String, Object> playerLeaderBoardDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -259,19 +248,15 @@ public class SalvoController {
         if(gameActual == null)
             return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
 
-        //if para juego lleno (2 players)
+        //-- if para juego lleno (2 players)
 /*        if()
             return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);*/
-
 
         else {
             GamePlayer newGamePlayer = new GamePlayer(gameActual,authenticatedPlayer);
             gamePlayerRepository.save(newGamePlayer);
 
-            return new ResponseEntity<>("Join Game", HttpStatus.CREATED);
+            return new ResponseEntity<>("Game join successfully", HttpStatus.CREATED);
         }
         }
     }
-
-
-

@@ -22,8 +22,6 @@ public class Score {
     @JoinColumn(name="player_id")
     private Player player;
 
-
-
     private Date finishDate;
 
     public Score(){}
@@ -47,7 +45,7 @@ public class Score {
         return player;
     }
 
-    public double getScore() {
+    public float getScore() {
         return score;
     }
 

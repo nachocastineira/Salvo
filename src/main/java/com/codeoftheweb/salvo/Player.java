@@ -101,7 +101,7 @@ public class Player {
     }
 
     public float getDraws(List<Score> scores){
-        return scores.stream().filter(score -> score.getScore() == 0.5).count();
+        return scores.stream().filter(score -> score.getScore() == (float)0.5).count();
     }
 
 
