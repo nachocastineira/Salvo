@@ -1,6 +1,7 @@
 package com.codeoftheweb.salvo;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
@@ -8,6 +9,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.net.URI;
+import java.net.http.HttpClient;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -247,10 +251,6 @@ public class SalvoController {
 
         if(gameActual == null)
             return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
-
-        //-- if para juego lleno (2 players)
-/*        if()
-            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);*/
 
         else {
             GamePlayer newGamePlayer = new GamePlayer(gameActual,authenticatedPlayer);
