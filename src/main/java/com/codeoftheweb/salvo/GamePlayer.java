@@ -83,6 +83,11 @@ public class GamePlayer {
         getShips().add(ship);
     }
 
+    public void addSalvo(Salvo salvo){
+        salvo.setGamePlayer(this);
+        getSalvoes().add(salvo);
+    }
+
     public List<Salvo> getSalvoes() {
         return salvoes;
     }

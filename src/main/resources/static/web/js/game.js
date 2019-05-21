@@ -10,7 +10,9 @@ var salvoJSON;
 var salvoPositions = [];
 var waitState = false;
 
-// postShipLocations(makePostUrl()); //descomentar para testar addShips
+postShipLocations(makePostUrl()); //descomentar para testar addShips
+postSalvo(makePostUrlSalvoes());
+
 
 refreshGameView(makeUrl());
 
@@ -294,8 +296,8 @@ function createTable(player) {
 function postShipLocations (postUrl) {
     $.post({
         url: postUrl,
-        data: shipsJSON, //comentar para testear, y descomentar la siguiente
-        // data: JSON.stringify([{type: "destroyer", locations: ["F2", "F3", "F4"]}] ),
+        // data: shipsJSON, //comentar para testear, y descomentar la siguiente
+        data: JSON.stringify([{type: "destroyer", locations: ["F2", "F3", "F4", "A2", "B2"]}] ),
         dataType: "text",
         contentType: "application/json"
     })
@@ -322,7 +324,8 @@ function postShipLocations (postUrl) {
 function postSalvo (postUrl) {
     $.post({
         url: postUrl,
-        data: salvoJSON,
+        // data: salvoJSON, //--comentar para testing y descomentar la siguiente
+        data: JSON.stringify({turn: "1", locations: ["A3", "B1", "H9", "F2", "A10"]} ),
         dataType: "text",
         contentType: "application/json"
     })

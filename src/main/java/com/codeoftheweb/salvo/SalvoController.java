@@ -24,6 +24,8 @@ public class SalvoController {
     private PasswordEncoder passwordEncoder;
     @Autowired
     private ShipRepository shipRepository;
+    @Autowired
+    private SalvoRepository salvoRepository;
 
     @RequestMapping("/games")
     public Map<String, Object> makeLoggedPlayer(Authentication authentication) {
@@ -84,8 +86,8 @@ public class SalvoController {
 
     private Map<String, Object> shipDTO(Ship ship) {
         Map<String, Object> dto = new LinkedHashMap<>();
-        dto.put("shipType", ship.getType());
-        dto.put("shipLocations", ship.getLocations());
+        dto.put("type", ship.getType());
+        dto.put("locations", ship.getLocations());
         return dto;
     }
 
@@ -189,6 +191,7 @@ public class SalvoController {
         return correctGP;
     }
 
+    //----------------------  CREATE NEW PLAYER (SIGN UP)  ----------------------//
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Object> register(@RequestParam String username, @RequestParam String password) {
 
@@ -203,6 +206,7 @@ public class SalvoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
+    //----------------------  CREATE NEW GAME  ----------------------//
     //crea nuevo game con gamePlayer, se le asigna al usuario logueado --> (variables de sesion)
     @RequestMapping(path = "/games", method = RequestMethod.POST)
     public ResponseEntity<Object> newGame(Authentication authentication) {
@@ -211,16 +215,21 @@ public class SalvoController {
 
         if (authenticatedPlayer == null)
             return new ResponseEntity<>("No name given", HttpStatus.FORBIDDEN);
+
         else {
             Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
+
             Game newGame = new Game(date);
             gameRepository.save(newGame);
+
             GamePlayer newGamePlayer = new GamePlayer(newGame, authenticatedPlayer);
             gamePlayerRepository.save(newGamePlayer);
+
             return new ResponseEntity<>("Game Created", HttpStatus.CREATED);
         }
     }
 
+    //----------------------  JOIN GAME  ----------------------//
     @RequestMapping(path = "game/{id}/players", method = RequestMethod.POST)
     public ResponseEntity<Object> joinGame(Authentication authentication, @PathVariable long id) {
 
@@ -235,6 +244,9 @@ public class SalvoController {
         if (gameActual == null)
             return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
 
+        if (gameActual.getGamePlayers().size() >= 2)
+            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
+
         else {
             GamePlayer newGamePlayer = new GamePlayer(gameActual, authenticatedPlayer);
             gamePlayerRepository.save(newGamePlayer);
@@ -242,6 +254,7 @@ public class SalvoController {
         }
     }
 
+    //----------------------  ADD SHIPS  ----------------------//
     @RequestMapping(path = "games/players/{id}/ships", method = RequestMethod.POST)
     public ResponseEntity<Object> addShips(Authentication authentication, @RequestBody Set<Ship> ships, @PathVariable long id) {
 
@@ -268,5 +281,39 @@ public class SalvoController {
         }
     }
 
+    //----------------------  ADD SALVOS  ----------------------//
+    @RequestMapping(path = "games/players/{id}/salvoes", method = RequestMethod.POST)
+    public ResponseEntity<Object> addSalvoes (Authentication authentication, @RequestBody Salvo salvo, @PathVariable long id) {
 
+        Player authenticatedPlayer = getAuthentication(authentication);
+        GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
+
+        if (authenticatedPlayer == null)
+            return new ResponseEntity<>("No player logged in", HttpStatus.UNAUTHORIZED);
+        if (gamePlayer == null)
+            return new ResponseEntity<>("No such gamePlayer", HttpStatus.FORBIDDEN);
+        if (wrongGamePlayer(gamePlayer, authenticatedPlayer))
+            return new ResponseEntity<>("Wrong gamePlayer", HttpStatus.UNAUTHORIZED);
+
+        else{
+//            if (!hasTurnedSalvo(salvo, gamePlayer.getSalvoes()) ){
+                gamePlayer.addSalvo(salvo);
+                salvo.setGamePlayer(gamePlayer);
+                salvoRepository.save(salvo);
+                return new ResponseEntity<>("Salvo saved", HttpStatus.CREATED);
+//            }
+//            else
+//                return new ResponseEntity<>("Player already has salvoes", HttpStatus.FORBIDDEN);
+        }
+    }
+/*
+    private boolean hasTurnedSalvo(Salvo salvo, List<Salvo> salvoes) {
+
+        if (salvo.getTurn() == ){
+
+        }
+        else{
+
+        }
+    }*/
 }
