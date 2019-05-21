@@ -494,8 +494,3 @@ function getTurn(gamePlayerData) {
     }
     return turn;
 }
-
-
-
-
-

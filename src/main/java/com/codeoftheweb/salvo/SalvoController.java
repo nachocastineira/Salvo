@@ -301,18 +301,14 @@ public class SalvoController {
                 salvo.setGamePlayer(gamePlayer);
                 salvoRepository.save(salvo);
                 return new ResponseEntity<>("Salvo saved", HttpStatus.CREATED);
-//            }
-//            else
-//                return new ResponseEntity<>("Player already has salvoes", HttpStatus.FORBIDDEN);
+/*            }
+            else
+                return new ResponseEntity<>("Player already has salvoes", HttpStatus.FORBIDDEN);*/
         }
     }
-/*
-    private boolean hasTurnedSalvo(Salvo salvo, List<Salvo> salvoes) {
+/*    private boolean hasTurnedSalvo(Salvo salvo, List<Salvo> salvos) {
 
-        if (salvo.getTurn() == ){
-
-        }
-        else{
+        if (salvo.getTurn() == salvos.f){
 
         }
     }*/

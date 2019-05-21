@@ -328,11 +328,3 @@ function showScoreBoard(playersArray) {
         }
     }
 }
-
-
-
-
-
-
-
-
