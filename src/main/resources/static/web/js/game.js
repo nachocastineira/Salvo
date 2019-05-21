@@ -1,3 +1,4 @@
+
 // var player1 = "p1_";
 // var player2 = "p2_";
 var gamePlayerData = {};
@@ -8,6 +9,8 @@ var youID = "";
 var salvoJSON;
 var salvoPositions = [];
 var waitState = false;
+
+// postShipLocations(makePostUrl()); //descomentar para testar addShips
 
 refreshGameView(makeUrl());
 
@@ -291,7 +294,8 @@ function createTable(player) {
 function postShipLocations (postUrl) {
     $.post({
         url: postUrl,
-        data: shipsJSON,
+        data: shipsJSON, //comentar para testear, y descomentar la siguiente
+        // data: JSON.stringify([{type: "destroyer", locations: ["F2", "F3", "F4"]}] ),
         dataType: "text",
         contentType: "application/json"
     })
