@@ -92,10 +92,10 @@ public class SalvoController {
     }
 
     private List<Map<String, Object>> getShipList(List<Ship> ships) {
-            return ships
-                    .stream()
-                    .map(ship -> shipDTO(ship))
-                    .collect(Collectors.toList());
+        return ships
+                .stream()
+                .map(ship -> shipDTO(ship))
+                .collect(Collectors.toList());
     }
 
     public Map<String, Object> salvoDTO(Salvo salvo) {
@@ -283,7 +283,7 @@ public class SalvoController {
 
     //----------------------  ADD SALVOS  ----------------------//
     @RequestMapping(path = "games/players/{id}/salvoes", method = RequestMethod.POST)
-    public ResponseEntity<Object> addSalvoes (Authentication authentication, @RequestBody Salvo salvo, @PathVariable long id) {
+    public ResponseEntity<Object> addSalvoes(Authentication authentication, @RequestBody Salvo salvo, @PathVariable long id) {
 
         Player authenticatedPlayer = getAuthentication(authentication);
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
@@ -295,21 +295,28 @@ public class SalvoController {
         if (wrongGamePlayer(gamePlayer, authenticatedPlayer))
             return new ResponseEntity<>("Wrong gamePlayer", HttpStatus.UNAUTHORIZED);
 
-        else{
-//            if (!hasTurnedSalvo(salvo, gamePlayer.getSalvoes()) ){
+        else {
+            if (!hasTurnedSalvo(salvo, gamePlayer.getSalvoes())) {
                 gamePlayer.addSalvo(salvo);
                 salvo.setGamePlayer(gamePlayer);
                 salvoRepository.save(salvo);
                 return new ResponseEntity<>("Salvo saved", HttpStatus.CREATED);
-/*            }
-            else
-                return new ResponseEntity<>("Player already has salvoes", HttpStatus.FORBIDDEN);*/
+            } else
+                return new ResponseEntity<>("Player already has salvoes", HttpStatus.FORBIDDEN);
         }
     }
-/*    private boolean hasTurnedSalvo(Salvo salvo, List<Salvo> salvos) {
 
-        if (salvo.getTurn() == salvos.f){
+    private boolean hasTurnedSalvo(Salvo newSalvo, List<Salvo> salvosGameplayer) {
 
+        boolean hasSalvoes = false;
+
+        for (Salvo salvo : salvosGameplayer) {
+            if (salvo.getTurn() == newSalvo.getTurn())
+                hasSalvoes = true;
         }
-    }*/
+        return hasSalvoes;
+    }
+
+
+
 }

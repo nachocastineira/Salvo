@@ -96,4 +96,3 @@ public class GamePlayer {
         this.salvoes = salvoes;
     }
 }
-
