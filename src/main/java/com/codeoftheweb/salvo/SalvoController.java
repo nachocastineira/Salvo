@@ -33,7 +33,7 @@ public class SalvoController {
 
         Player authenticatedPlayer = getAuthentication(authentication);
         if (authenticatedPlayer == null)
-            dto.put("player", "Guest");
+            dto.put("player", "Invitado");
         else
             dto.put("player", loggedPlayerDTO(authenticatedPlayer));
 
@@ -133,12 +133,10 @@ public class SalvoController {
         Player authenticatedPlayer = getAuthentication(authentication);
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
 
-            if (wrongGamePlayer(gamePlayer, authenticatedPlayer)) {
+            if (wrongGamePlayer(gamePlayer, authenticatedPlayer))
                 return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-            }
-            else{
+            else
             return new ResponseEntity<>(gameViewDTO(gamePlayerRepository.findById(id).get()), HttpStatus.OK);
-        }
     }
 
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {

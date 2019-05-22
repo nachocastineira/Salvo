@@ -160,7 +160,7 @@ function updateView() {
         showGamesTable(gamesData);
         addScoresToPlayersArray(getPlayers(gamesData));
         showScoreBoard(playersArray);
-        if (data.player == "Guest") {
+        if (data.player == "Invitado") {
             $('#currentPlayer').text(data.player);
             $('#logout-form').hide("slow");
             $('#login-form').show("slow");
@@ -184,24 +184,24 @@ function showGamesTable(gamesData) {
             let joinButtonHtml = null;
 
             let DateCreated = new Date(gamesData[i].created);
-            DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
+            DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " - " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
             let row = $('<tr></tr>').prependTo(table);
             $('<td class="textCenter">' + gamesData[i].id + '</td>').appendTo(row);
-            $('<td>' + DateCreated + '</td>').appendTo(row);
+            $('<td class="textCenter">' + DateCreated + '</td>').appendTo(row);
 
 
             for (let j = 0; j < gamesData[i].gamePlayers.length; j++) {
 
 
                 if (gamesData[i].gamePlayers.length == 2) {
-                    $('<td>' + gamesData[i].gamePlayers[j].player.username + '</td>').appendTo(row);
+                    $('<td class="textCenter">' + gamesData[i].gamePlayers[j].player.username + '</td>').appendTo(row);
                 }
-                if (gamesData[i].gamePlayers.length == 1 && (data.player == "Guest" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500">WAITING FOR PLAYER</td>').appendTo(row);
+                if (gamesData[i].gamePlayers.length == 1 && (data.player == "Invitado" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
+                    $('<td class="textCenter">' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500 textCenter">ESPERANDO JUGADOR 1</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && data.player.id != null && data.player.id != gamesData[i].gamePlayers[j].player.id) {
-                    $('<td>' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500">WAITING FOR PLAYER</td>').appendTo(row);
-                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '>JOIN GAME</button></td>';
+                    $('<td class="textCenter">' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500 textCenter">ESPERANDO JUGADOR 2</td>').appendTo(row);
+                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '><i class="fas fa-gamepad"></i> UNIRSE AL JUEGO</button></td>';
 
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
@@ -212,7 +212,7 @@ function showGamesTable(gamesData) {
 
             if (isLoggedPlayer === true) {
                 let gameUrl = "/web/game.html?gp=" + gpid;
-                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-warning" role="button">ENTER GAME</a></td>').appendTo(row);
+                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-light" role="button"><i class="fas fa-eye"></i> MOSTRAR JUEGO</a></td>').appendTo(row);
             } else if (joinButtonHtml !== null){
                 $(joinButtonHtml).appendTo(row);
             } else {
