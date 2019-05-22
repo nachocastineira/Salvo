@@ -35,19 +35,18 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
-
 	@Bean
 	public CommandLineRunner initData3
 			(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository,
-             PlayerRepository playerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository,
-             ScoreRepository scoreRepository) {
+			 PlayerRepository playerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository,
+			 ScoreRepository scoreRepository) {
 		return (args) -> {
 
-			//-- DATES
+			//-- NEW DATES
 			Date date = new Date();
 			date = Date.from(date.toInstant());
 
-			//-- GAMES
+			//-- NEW GAMES
 			Game game1 = new Game(date);
 			Game game2 = new Game(date);
 			Game game3 = new Game(date);
@@ -58,7 +57,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gameRepository.save(game4);
 
 
-			//-- PLAYERS
+			//-- NEW PLAYERS
 			Player player1 = new Player("j.bauer@ctu.gov", passwordEncoder().encode("24"));
 			Player player2 = new Player("c.obrian@ctu.gov", passwordEncoder().encode("42"));
 			Player player3 = new Player("kim_bauer@gmail.com", passwordEncoder().encode("kb"));
@@ -69,7 +68,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			playerRepository.save(player4);
 
 
-			//-- GAMEPLAYERS
+			//-- NEW GAMEPLAYERS
 			GamePlayer gamePlayer1 = new GamePlayer(game1, player1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1, player3);
 			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
@@ -85,7 +84,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gamePlayerRepository.save(gamePlayer6);
 			gamePlayerRepository.save(gamePlayer7);
 
-			//--LOCATIONS SHIP
+			//-- NEW LOCATIONS SHIP
 			List<String> shipLocations1 = new ArrayList<>();
 			shipLocations1.add("H2");
 			shipLocations1.add("H3");
@@ -103,7 +102,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipLocations4.add("B10");
 			shipLocations4.add("C10");
 
-			//---SHIPS
+			//-- NEW SHIPS
 			String shipType1 = "carrier";//length = 5
 			String shipType2 = "battleship"; //length = 4
 			String shipType3 = "submarine"; //length = 3
@@ -119,7 +118,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 //			shipRepository.save(ship3);
 //			shipRepository.save(ship4);
 
-			//--LOCATIONS SALVOES
+			//-- NEW LOCATIONS SALVOES
 			List<String> salvoLocation1 = new ArrayList<>();
 			salvoLocation1.add("D4");
 			salvoLocation1.add("H2");
@@ -137,7 +136,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			List<String> salvoLocation6 = new ArrayList<>();
 			salvoLocation6.add("D4");
 
-			//-- SALVOES
+			//-- NEW SALVOES
 			Salvo salvo1 = new Salvo(gamePlayer1, "1", salvoLocation1);
 			Salvo salvo2 = new Salvo(gamePlayer2, "1", salvoLocation2);
 			Salvo salvo3 = new Salvo(gamePlayer1, "2", salvoLocation3);
@@ -151,18 +150,17 @@ public class SalvoApplication extends SpringBootServletInitializer {
 //			salvoRepository.save(salvo5);
 //			salvoRepository.save(salvo6);
 
-			//-- SCORES
+			//-- NEW SCORES
 			float win = 1;
-			float tie  = (float)0.5;
+			float tie = (float) 0.5;
 			float lose = 0;
 
-			Score score1 = new Score (game1, player1, win, date);
-			Score score2 = new Score (game1, player2, lose, date);
-			Score score3 = new Score (game2, player2, tie , date);
-			Score score4 = new Score (game2, player3, tie, date);
-			Score score5 = new Score (game3, player3, win , date);
-			Score score6 = new Score (game3, player1, lose , date);
-
+			Score score1 = new Score(game1, player1, win, date);
+			Score score2 = new Score(game1, player2, lose, date);
+			Score score3 = new Score(game2, player2, tie, date);
+			Score score4 = new Score(game2, player3, tie, date);
+			Score score5 = new Score(game3, player3, win, date);
+			Score score6 = new Score(game3, player1, lose, date);
 			scoreRepository.save(score1);
 			scoreRepository.save(score2);
 			scoreRepository.save(score3);
@@ -178,19 +176,21 @@ public class SalvoApplication extends SpringBootServletInitializer {
 	}
 }
 
-//para autenticar el usuario
+
+							//--------------- SECURITY ---------------//
+//-- AUTENTICACION DEL USUARIO
 @Configuration
 class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 
-    @Autowired
-    PasswordEncoder passwordEncoder;
+	@Autowired
+	PasswordEncoder passwordEncoder;
 
 	@Autowired
 	PlayerRepository playerRepository;
 
 	@Override
-	public void init (AuthenticationManagerBuilder auth) throws Exception{
-		auth.userDetailsService(inputName->{
+	public void init(AuthenticationManagerBuilder auth) throws Exception {
+		auth.userDetailsService(inputName -> {
 			Player player = playerRepository.findByUsername(inputName);
 			if (player != null) {
 				return new User(player.getUsername(), player.getPassword(),
@@ -202,6 +202,7 @@ class WebSecurityConfiguration extends GlobalAuthenticationConfigurerAdapter {
 	}
 }
 
+//-- RUTAS PERMITIDAS, LOGIN Y LOGOUT
 @EnableWebSecurity
 @Configuration
 class WebSecurityConfig extends WebSecurityConfigurerAdapter {
@@ -212,15 +213,15 @@ class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.authorizeRequests()
 				.antMatchers("/web/games_3.html").permitAll()
 				.antMatchers("/web/**").permitAll()
-                .antMatchers("/api/players").permitAll()
+				.antMatchers("/api/players").permitAll()
 				.antMatchers("/api/games").permitAll()
 				.antMatchers("/api/leaderBoard").permitAll()
 				.antMatchers("/api/game_view/*").hasAuthority("user")
 				.antMatchers("/rest/").denyAll()
-                .anyRequest().permitAll();
+				.anyRequest().permitAll();
 
 		http
-                .formLogin()
+				.formLogin()
 				.usernameParameter("username")
 				.passwordParameter("password")
 				.loginPage("/api/login");
