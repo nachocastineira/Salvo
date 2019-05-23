@@ -20,7 +20,7 @@ public class Player {
 
     @OneToMany(mappedBy="player", fetch=FetchType.EAGER)
     private //el mappedBy coincide con atributo Player player de GamePlayer
-    Set<GamePlayer> gamePlayers;
+            List<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
     private List<Score> scores;
@@ -46,11 +46,11 @@ public class Player {
         this.username = username;
     }
 
-    public Set<GamePlayer> getGamePlayers() {
+    public List<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
 
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+    public void setGamePlayers(List<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
     }
 

@@ -21,7 +21,7 @@ public class Game {
 
     @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
     private //el mappedBy coincide con atributo Game game de GamePlayer
-            Set<GamePlayer> gamePlayers;
+            List<GamePlayer> gamePlayers;
 
     @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
     private Set<Score> scores;
@@ -59,11 +59,11 @@ public class Game {
         return getGamePlayers().stream().map(sub -> sub.getPlayer()).collect(toList());
     }
 
-    public Set<GamePlayer> getGamePlayers() {
+    public List<GamePlayer> getGamePlayers() {
         return gamePlayers;
     }
 
-    public void setGamePlayers(Set<GamePlayer> gamePlayers) {
+    public void setGamePlayers(List<GamePlayer> gamePlayers) {
         this.gamePlayers = gamePlayers;
     }
 

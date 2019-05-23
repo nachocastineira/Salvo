@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import java.util.*;
@@ -70,7 +71,7 @@ public class SalvoController {
     }
 
     //hago lo mismo que arriba pero itero los gamePlayers
-    public List<Object> getGamePlayersLista(Set<GamePlayer> gamePlayers) {
+    public List<Object> getGamePlayersLista(List<GamePlayer> gamePlayers) {
         return gamePlayers
                 .stream()
                 .map(gamePlayer -> gamePlayerDTO(gamePlayer)) //itero, para ir obteniendo todos los gamePlayer con el metodo de abajo
@@ -83,6 +84,7 @@ public class SalvoController {
         dto.put("player", gamePlayer.getPlayer());
         return dto;
     }
+
 
     private Map<String, Object> shipDTO(Ship ship) {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -139,14 +141,76 @@ public class SalvoController {
             return new ResponseEntity<>(gameViewDTO(gamePlayerRepository.findById(id).get()), HttpStatus.OK);
     }
 
+
+    public Map<String, Object> getHits(GamePlayer gamePlayer1, GamePlayer gamePlayer2) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        Player authenticatedPlayer = getAuthentication(authentication);
+
+        if (authenticatedPlayer.getId() == gamePlayer1.getPlayer().getId())
+            dto.put("self", gamePlayer1.getPlayer().getId());
+        else
+            dto.put("opponent", gamePlayer2.getPlayer().getId());
+
+        ///----
+        List<String> shipsSelf = getShipsLocations(gamePlayer1);
+        List<String> salvoesOpponent = getSalvoesLocations(gamePlayer2);
+
+        int hits = 0;
+        if (shipsSelf == salvoesOpponent){
+            hits++;
+        }
+        ///----
+
+        return dto;
+    }
+
+//Map -> Recibe una entrada y devuelve una salida
+//FlatMap -> Recibe una entrada y devuelve varias salidas
+
+    public List<String> getShipsLocations(GamePlayer gamePlayer) {
+        List<String> shipsLocations = gamePlayer.getShips().stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+        return shipsLocations;
+    }
+
+    public List<String> getSalvoesLocations(GamePlayer gamePlayer){
+        List<String> salvoesLocations = gamePlayer.getSalvoes().stream().map(salvo -> salvo.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
+        return salvoesLocations;
+    }
+
+    public List<String> getHitsLocations (GamePlayer self){
+
+        List<String> locationsShipsSelf = getShipsLocations(self);
+        List<String> locationsSalvosOpponent = getSalvoesLocations(getOpponent(self));
+
+        //  Solo traigo las celdas que coinciden en ambas listas
+        return locationsShipsSelf.stream().filter(cell -> locationsSalvosOpponent.contains(cell)).collect(Collectors.toList());
+    }
+
+    //Un game tiene 2 players, busco el oponente de mi gamePlayer, descartando a mi gamePlayer
+    public GamePlayer getOpponent (GamePlayer gpSelf){
+        return gpSelf.getGame().getGamePlayers().stream().filter(gp -> gp.getId() != gpSelf.getId()).findAny().orElse(null);
+    }
+
+//--------------------------------------------------
+
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
+
         dto.put("id", gamePlayer.getGame().getId());
         dto.put("created", gamePlayer.getGame().getCreated());
-        dto.put("gamePlayers", getGamePlayersLista(gamePlayer.getGame().getGamePlayers()));
-        dto.put("ships", gamePlayer.getShips());
+        dto.put("gamePlayers", gamePlayer.getGame().getGamePlayers().stream().map(gp -> gamePlayerDTO(gp)));
+        dto.put("ships", gamePlayer.getShips().stream().map(ship -> shipDTO(ship)));
         dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvoes().stream().map(salvo -> salvoDTO(salvo))));
         dto.put("scores", gamePlayer.getPlayer().getScores().stream().map(score -> scoreDTO(score)));
+       //--Test
+        dto.put("shipsL_Test", getShipsLocations(gamePlayer));
+        dto.put("salvosL_Test", getSalvoesLocations(gamePlayer));
+        dto.put("hitLocations_Test", getHitsLocations(gamePlayer));
+        dto.put("self", gamePlayer.getPlayer().getUsername());
+        dto.put("opponent", getOpponent(gamePlayer).getPlayer().getUsername());
+        //--Test
         return dto;
     }
 
@@ -263,7 +327,7 @@ public class SalvoController {
 
     //----------------------  ADD SHIPS  ----------------------//
     @RequestMapping(path = "games/players/{id}/ships", method = RequestMethod.POST)
-    public ResponseEntity<Object> addShips(Authentication authentication, @RequestBody Set<Ship> ships, @PathVariable long id) {
+    public ResponseEntity<Object> addShips(Authentication authentication, @RequestBody List<Ship> ships, @PathVariable long id) {
 
         Player authenticatedPlayer = getAuthentication(authentication);
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
@@ -323,6 +387,8 @@ public class SalvoController {
         }
         return hasSalvoes;
     }
+
+
 
 
 
