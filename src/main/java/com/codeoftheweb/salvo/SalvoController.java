@@ -142,30 +142,6 @@ public class SalvoController {
     }
 
 
-    public Map<String, Object> getHits(GamePlayer gamePlayer1, GamePlayer gamePlayer2) {
-        Map<String, Object> dto = new LinkedHashMap<String, Object>();
-
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        Player authenticatedPlayer = getAuthentication(authentication);
-
-        if (authenticatedPlayer.getId() == gamePlayer1.getPlayer().getId())
-            dto.put("self", gamePlayer1.getPlayer().getId());
-        else
-            dto.put("opponent", gamePlayer2.getPlayer().getId());
-
-        ///----
-        List<String> shipsSelf = getShipsLocations(gamePlayer1);
-        List<String> salvoesOpponent = getSalvoesLocations(gamePlayer2);
-
-        int hits = 0;
-        if (shipsSelf == salvoesOpponent){
-            hits++;
-        }
-        ///----
-
-        return dto;
-    }
-
 //Map -> Recibe una entrada y devuelve una salida
 //FlatMap -> Recibe una entrada y devuelve varias salidas
 
@@ -179,13 +155,22 @@ public class SalvoController {
         return salvoesLocations;
     }
 
-    public List<String> getHitsLocations (GamePlayer self){
+    //  Solo traigo las celdas que coinciden en ambas listas, traidas con los dos metodos anteriores
+    public List<String> getHitsLocations (GamePlayer gamePlayer){
 
-        List<String> locationsShipsSelf = getShipsLocations(self);
-        List<String> locationsSalvosOpponent = getSalvoesLocations(getOpponent(self));
-
-        //  Solo traigo las celdas que coinciden en ambas listas
+        List<String> locationsShipsSelf = getShipsLocations(gamePlayer);
+        List<String> locationsSalvosOpponent = getSalvoesLocations(getOpponent(gamePlayer));
         return locationsShipsSelf.stream().filter(cell -> locationsSalvosOpponent.contains(cell)).collect(Collectors.toList());
+    }
+
+    public Long getCountMissed (GamePlayer gamePlayer){
+        List<String> locationsShipsSelf = getShipsLocations(gamePlayer);
+        List<String> locationsSalvosOpponent = getSalvoesLocations(getOpponent(gamePlayer));
+
+        Long hits = locationsShipsSelf.stream().filter(cell -> locationsSalvosOpponent.contains(cell)).count();
+        Long salvos = locationsSalvosOpponent.stream().count();
+        Long missed = salvos - hits;
+        return missed;
     }
 
     //Un game tiene 2 players, busco el oponente de mi gamePlayer, descartando a mi gamePlayer
@@ -193,24 +178,50 @@ public class SalvoController {
         return gpSelf.getGame().getGamePlayers().stream().filter(gp -> gp.getId() != gpSelf.getId()).findAny().orElse(null);
     }
 
+    public Map<String, Object> hitsDTO(GamePlayer gamePlayer){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("self", gpHitsDTO(gamePlayer));
+        dto.put("opponent", gpHitsDTO(getOpponent(gamePlayer)));
+        return dto;
+    }
+
+    public Map<String, Object> gpHitsDTO(GamePlayer gamePlayer) {
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+        dto.put("turn", 1); //hardcodeado
+        dto.put("hitLocations", getHitsLocations(gamePlayer));
+        dto.put("damages", getDamages(gamePlayer));
+        dto.put("missed", getCountMissed(gamePlayer));
+        return dto;
+    }
+
+    public Map<String, Object> getDamages(GamePlayer gamePlayer){
+        Map<String, Object> dto = new LinkedHashMap<String, Object>();
+
+        dto.put("carrierHits", 0);
+        dto.put("battleshipHits", 0);
+        dto.put("submarineHits", 0);
+        dto.put("destroyerHits", 0);
+        dto.put("patrolboatHits", 0);
+
+        dto.put("carrier", 0);
+        dto.put("battleship", 0);
+        dto.put("submarine", 0);
+        dto.put("destroyer", 0);
+        dto.put("patrolboat", 0);
+
+        return dto;
+    }
 //--------------------------------------------------
 
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
-
         dto.put("id", gamePlayer.getGame().getId());
         dto.put("created", gamePlayer.getGame().getCreated());
         dto.put("gamePlayers", gamePlayer.getGame().getGamePlayers().stream().map(gp -> gamePlayerDTO(gp)));
         dto.put("ships", gamePlayer.getShips().stream().map(ship -> shipDTO(ship)));
         dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvoes().stream().map(salvo -> salvoDTO(salvo))));
         dto.put("scores", gamePlayer.getPlayer().getScores().stream().map(score -> scoreDTO(score)));
-       //--Test
-        dto.put("shipsL_Test", getShipsLocations(gamePlayer));
-        dto.put("salvosL_Test", getSalvoesLocations(gamePlayer));
-        dto.put("hitLocations_Test", getHitsLocations(gamePlayer));
-        dto.put("self", gamePlayer.getPlayer().getUsername());
-        dto.put("opponent", getOpponent(gamePlayer).getPlayer().getUsername());
-        //--Test
+        dto.put("hits", hitsDTO(gamePlayer));
         return dto;
     }
 
@@ -380,7 +391,6 @@ public class SalvoController {
     private boolean hasTurnedSalvo(Salvo newSalvo, List<Salvo> salvosGameplayer) {
 
         boolean hasSalvoes = false;
-
         for (Salvo salvo : salvosGameplayer) {
             if (salvo.getTurn() == newSalvo.getTurn())
                 hasSalvoes = true;
