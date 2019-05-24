@@ -10,8 +10,8 @@ var salvoJSON;
 var salvoPositions = [];
 var waitState = false;
 
-postShipLocations(makePostUrl()); //descomentar para testar addShips
-postSalvo(makePostUrlSalvoes());
+// postShipLocations(makePostUrl()); //descomentar para testar addShips
+// postSalvo(makePostUrlSalvoes());
 
 
 refreshGameView(makeUrl());
@@ -189,7 +189,7 @@ function showSelf (gamePlayerData) {
 
     let DateCreated = new Date(gamePlayerData.created);
     DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
-    $('#gamePlayerDetails').html('<span class="labelGame">Game ID: </span><span class="labelGameBig">' + gamePlayerData.id + '</span><span class="labelGame"> Created: </span><span class="labelGameBig">' + DateCreated + '</span>');
+    $('#gamePlayerDetails').html('<span class="labelGame">Partida N°: </span><span class="labelGameBig">' + gamePlayerData.id + '</span><span class="labelGame"> Creada: </span><span class="labelGameBig">' + DateCreated + '</span>');
     $('#currentPlayerName').text(you);
     $('#OpponentPlayerName').text(viewer);
 
@@ -296,8 +296,8 @@ function createTable(player) {
 function postShipLocations (postUrl) {
     $.post({
         url: postUrl,
-        // data: shipsJSON, //comentar para testear, y descomentar la siguiente
-        data: JSON.stringify([{type: "destroyer", locations: ["F2", "F3", "F4", "A2", "B2"]}] ),
+        data: shipsJSON, //comentar para testear, y descomentar la siguiente
+        // data: JSON.stringify([{type: "submarine", locations: ["F2", "F3", "F4"]}, {type: "patrolboat", locations: ["A2", "B2"]}, {type: "battleship", locations: ["C1", "D1", "E1", "F1"]} ]),
         dataType: "text",
         contentType: "application/json"
     })
@@ -324,8 +324,9 @@ function postShipLocations (postUrl) {
 function postSalvo (postUrl) {
     $.post({
         url: postUrl,
-        // data: salvoJSON, //--comentar para testing y descomentar la siguiente
-        data: JSON.stringify({turn: "1", locations: ["A3", "B1", "H9", "F2", "A10"]} ),
+        data: salvoJSON, //--comentar para testing y descomentar la siguiente
+        // data: JSON.stringify( {turn: "1", locations: ["F2", "F3", "C1", "C6", "A2"]}),
+
         dataType: "text",
         contentType: "application/json"
     })

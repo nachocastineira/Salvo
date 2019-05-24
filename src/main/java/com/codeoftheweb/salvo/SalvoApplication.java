@@ -86,13 +86,18 @@ public class SalvoApplication extends SpringBootServletInitializer {
 
 			//-- NEW LOCATIONS SHIP
 			List<String> shipLocations1 = new ArrayList<>();
-			shipLocations1.add("H2");
-			shipLocations1.add("H3");
-			shipLocations1.add("H4");
+			shipLocations1.add("F2");
+			shipLocations1.add("F3");
+			shipLocations1.add("H1");
+			shipLocations1.add("B9");
+			shipLocations1.add("C7");
 			List<String> shipLocations2 = new ArrayList<>();
 			shipLocations2.add("F5");
 			shipLocations2.add("F6");
 			shipLocations2.add("F7");
+			shipLocations2.add("C4");
+			shipLocations2.add("C5");
+
 			List<String> shipLocations3 = new ArrayList<>();
 			shipLocations3.add("D4");
 			shipLocations3.add("E4");
@@ -103,20 +108,20 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipLocations4.add("C10");
 
 			//-- NEW SHIPS
-			String shipType1 = "carrier";//length = 5
-			String shipType2 = "battleship"; //length = 4
-			String shipType3 = "submarine"; //length = 3
-			String shipType4 = "destroyer"; //length = 2
-			String shipType5 = "patrolboat"; //length = 1
+			String carrier = "carrier";//length = 5
+			String battleship = "battleship"; //length = 4
+			String submarine = "submarine"; //length = 3
+			String destroyer = "destroyer"; //length = 3
+			String patrolboat = "patrolboat"; //length = 2
 
-			Ship ship1 = new Ship(gamePlayer1, shipLocations1, shipType2); //Game 1 -> Player 1
-			Ship ship2 = new Ship(gamePlayer1, shipLocations3, shipType4);  //Game 1 -> Player 1
-			Ship ship3 = new Ship(gamePlayer2, shipLocations2, shipType3);    //Game 1 -> Player 3
-			Ship ship4 = new Ship(gamePlayer2, shipLocations4, shipType5);    //Game 1 -> Player 3
-//			shipRepository.save(ship1);
-//			shipRepository.save(ship2);
-//			shipRepository.save(ship3);
-//			shipRepository.save(ship4);
+			Ship ship1 = new Ship(gamePlayer1, shipLocations1, battleship); //Game 1 -> Player 1
+			Ship ship2 = new Ship(gamePlayer1, shipLocations3, destroyer);  //Game 1 -> Player 1
+			Ship ship3 = new Ship(gamePlayer2, shipLocations2, submarine);    //Game 1 -> Player 3
+			Ship ship4 = new Ship(gamePlayer2, shipLocations4, patrolboat);    //Game 1 -> Player 3
+			shipRepository.save(ship1);
+			shipRepository.save(ship2);
+			shipRepository.save(ship3);
+			shipRepository.save(ship4);
 
 			//-- NEW LOCATIONS SALVOES
 			List<String> salvoLocation1 = new ArrayList<>();
@@ -129,26 +134,35 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			salvoLocation2.add("H2");
 			List<String> salvoLocation3 = new ArrayList<>();
 			salvoLocation3.add("C10");
+			salvoLocation3.add("B5");
+			salvoLocation3.add("C7");
+
 			List<String> salvoLocation4 = new ArrayList<>();
 			salvoLocation4.add("H3");
+			salvoLocation4.add("A1");
+			salvoLocation4.add("I5");
 			List<String> salvoLocation5 = new ArrayList<>();
 			salvoLocation5.add("F6");
+			salvoLocation5.add("I10");
+			salvoLocation5.add("I8");
 			List<String> salvoLocation6 = new ArrayList<>();
-			salvoLocation6.add("D4");
+			salvoLocation6.add("F10");
+			salvoLocation6.add("I1");
+			salvoLocation6.add("E6");
 
 			//-- NEW SALVOES
 			Salvo salvo1 = new Salvo(gamePlayer1, "1", salvoLocation1);
-			Salvo salvo2 = new Salvo(gamePlayer2, "1", salvoLocation2);
-			Salvo salvo3 = new Salvo(gamePlayer1, "2", salvoLocation3);
-			Salvo salvo4 = new Salvo(gamePlayer2, "2", salvoLocation4);
-			Salvo salvo5 = new Salvo(gamePlayer1, "3", salvoLocation5);
+			Salvo salvo2 = new Salvo(gamePlayer2, "1", salvoLocation4);
+			Salvo salvo3 = new Salvo(gamePlayer1, "2", salvoLocation2);
+			Salvo salvo4 = new Salvo(gamePlayer2, "2", salvoLocation5);
+			Salvo salvo5 = new Salvo(gamePlayer1, "3", salvoLocation3);
 			Salvo salvo6 = new Salvo(gamePlayer2, "3", salvoLocation6);
-//			salvoRepository.save(salvo1);
-//			salvoRepository.save(salvo2);
-//			salvoRepository.save(salvo3);
-//			salvoRepository.save(salvo4);
-//			salvoRepository.save(salvo5);
-//			salvoRepository.save(salvo6);
+			salvoRepository.save(salvo1);
+			salvoRepository.save(salvo2);
+			salvoRepository.save(salvo3);
+			salvoRepository.save(salvo4);
+			salvoRepository.save(salvo5);
+			salvoRepository.save(salvo6);
 
 			//-- NEW SCORES
 			float win = 1;
