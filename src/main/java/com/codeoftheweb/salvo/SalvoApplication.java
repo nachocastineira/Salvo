@@ -99,9 +99,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipLocations2.add("C5");
 
 			List<String> shipLocations3 = new ArrayList<>();
+			shipLocations3.add("B4");
+			shipLocations3.add("C4");
 			shipLocations3.add("D4");
-			shipLocations3.add("E4");
-			shipLocations3.add("F4");
 			List<String> shipLocations4 = new ArrayList<>();
 			shipLocations4.add("A10");
 			shipLocations4.add("B10");

@@ -70,7 +70,7 @@ function refreshGameView(_url) {
 
 
 
-            $('#gameStateBlock').html('<span class="gameStateLabel">TURN: </span><span class="gameStateLabelBig">' + getTurn(gamePlayerData) + '</span><span class="gameStateLabel"> ACTION REQUIRED: </span><span class="gameStateLabelBig">' + gamePlayerData.gameState + '</span>');
+            $('#gameStateBlock').html('<span class="gameStateLabel">TURNO: </span><span class="gameStateLabelBig">' + getTurn(gamePlayerData) + '</span><span class="gameStateLabel"> ACCIÓN: </span><span class="gameStateLabelBig">' + gamePlayerData.gameState + '</span>');
 
             console.log("waitState: " + waitState);
 
@@ -135,7 +135,7 @@ function refreshGameView(_url) {
                     '                <div class="droppable salvoCharger caught--it" id="salvoout3"><div class="draggable" id="salvo3"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout4"><div class="draggable" id="salvo4"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout5"><div class="draggable" id="salvo5"></div></div>\n' +
-                    '                <div class="textCenter"><button class="btn btn-warning" id="postSalvo">Fire Salvo!</button></div>\n' +
+                    '                <div class="textCenter"><button class="btn btn-danger text-white" id="postSalvo"><i class="fas fa-bullseye"></i> DISPARAR <i class="fas fa-bullseye"></i></button></div>\n' +
                     '            </div>');
 
                 resetSalvoCellIds();
@@ -143,7 +143,7 @@ function refreshGameView(_url) {
                 $('#postSalvo').click(function () {
                     makeSalvoJSON();
                     if (salvoPositions.length === 0){
-                        $('#errorSalvo').text("Error! No salvos to fire! You must set at least one target!");
+                        $('#errorSalvo').text("¡Error! Debe posicionar sus salvos en el radar");
                         $('#errorSalvo').show( "slow" ).delay(3000).hide( "slow" );
                         console.log("No salvos to shoot!");
                     } else {
@@ -418,7 +418,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.carrierHits > 0){
             hitsReport += "Carrier " + addDamagesIcons(playTurn.damages.carrierHits, "hit") + " ";
             if (playTurn.damages.carrier === 5){
-                hitsReport += "SUNK! ";
+                hitsReport += "¡HUNDIDO! ";
                 $(playerTag + 'carrierIcon').html('<img src="img/carriersunk.png">');
                 shipsAfloat--;
             }
@@ -427,7 +427,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.battleshipHits > 0){
             hitsReport += "Battleship " + addDamagesIcons(playTurn.damages.battleshipHits, "hit") + " ";
             if (playTurn.damages.battleship === 4){
-                hitsReport += "SUNK! ";
+                hitsReport += "HUNDIDO! ";
                 $(playerTag + 'battleshipIcon').html('<img src="img/battleshipsunk.png">');
                 shipsAfloat--;
             }
@@ -435,7 +435,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.submarineHits > 0){
             hitsReport += "Submarine " + addDamagesIcons(playTurn.damages.submarineHits, "hit") + " ";
             if (playTurn.damages.submarine === 3){
-                hitsReport += "SUNK! ";
+                hitsReport += "¡HUNDIDO! ";
                 $(playerTag + 'submarineIcon').html('<img src="img/submarinesunk.png">');
                 shipsAfloat--;
             }
@@ -443,7 +443,7 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.destroyerHits > 0){
             hitsReport += "Destroyer " + addDamagesIcons(playTurn.damages.destroyerHits, "hit") + " ";
             if (playTurn.damages.destroyer === 3){
-                hitsReport += "SUNK! ";
+                hitsReport += "¡HUNDIDO! ";
                 $(playerTag + 'destoyerIcon').html('<img src="img/destoyersunk.png">');
                 shipsAfloat--;
             }
@@ -451,18 +451,18 @@ function makeGameRecordTable (hitsArray, gameRecordTableId) {
         if (playTurn.damages.patrolboatHits > 0){
             hitsReport += "Patrol Boat " + addDamagesIcons(playTurn.damages.patrolboatHits, "hit") + " ";
             if (playTurn.damages.patrolboat === 2){
-                hitsReport += "SUNK! ";
+                hitsReport += "¡HUNDIDO! ";
                 $(playerTag + 'patrolboatIcon').html('<img src="img/patrolboatsunk.png">');
                 shipsAfloat--;
             }
         }
 
         if (playTurn.missed > 0){
-            hitsReport +=  "Missed shots " + addDamagesIcons(playTurn.missed, "missed") + " ";
+            hitsReport +=  "Disparos fallidos " + addDamagesIcons(playTurn.missed, "missed") + " ";
         }
 
         if (hitsReport === ""){
-            hitsReport = "All salvoes missed! No damages!"
+            hitsReport = "¡Todos los disparos han fallado! Sin daños"
         }
 
         $('<tr><td class="textCenter">' + playTurn.turn + '</td><td>' + hitsReport + '</td></tr>').prependTo(tableId);
