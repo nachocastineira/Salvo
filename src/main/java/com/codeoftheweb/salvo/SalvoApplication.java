@@ -123,6 +123,10 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipRepository.save(ship3);
 			shipRepository.save(ship4);
 
+			Ship ship5_test = new Ship(gamePlayer3, shipLocations4, patrolboat);    //Game 1 -> Player 3
+			shipRepository.save(ship5_test);
+
+
 			//-- NEW LOCATIONS SALVOES
 			List<String> salvoLocation1 = new ArrayList<>();
 			salvoLocation1.add("D4");
