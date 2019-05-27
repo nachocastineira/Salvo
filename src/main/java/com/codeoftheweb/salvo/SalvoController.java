@@ -308,52 +308,50 @@ public class SalvoController {
         String tie = "TIE";
 
 
-        if (opponent == null)
+        if (opponent == null) {
             state = waitingForOpponent;
+        } else {
+            if (getShipsLocations(self).isEmpty())
+                state = placeShips;
 
-        if (getShipsLocations(self).isEmpty()) {
-            state = placeShips;
-        }
-        else if (!getShipsLocations(self).isEmpty() && getShipsLocations(opponent).isEmpty()) {
-            state = wait;
-        }
+            else {
+                if (!self.getShips().isEmpty() && opponent.getShips().isEmpty())
+                    state = wait;
 
-        long turn = getCurrentTurn(self, opponent);
-        if (self.getSalvoes().size() != turn && !getShipsLocations(opponent).isEmpty() && !getShipsLocations(self).isEmpty())
-            state = play;
+                long turn = getCurrentTurn(self, opponent);
+                if (self.getSalvoes().size() != turn && !getShipsLocations(opponent).isEmpty() && !getShipsLocations(self).isEmpty())
+                    state = play;
+//            else
+//                state = wait;
 
 
-        if (self.getSalvoes().size() == opponent.getSalvoes().size()){
+                if (self.getSalvoes().size() == opponent.getSalvoes().size()) {
 
-            Date date = new Date();
-            date = Date.from(date.toInstant());
+                    Date date = new Date();
+                    date = Date.from(date.toInstant());
 
-            Player selfPlayer = self.getPlayer();
-            Game game = self.getGame();
+                    Player selfPlayer = self.getPlayer();
+                    Game game = self.getGame();
 
-            if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes()) && allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())){
-                Score newScore = new Score(game, selfPlayer, (float)0.5, date);
-                if (!existsScore(newScore, game))
-                    scoreRepository.save(newScore);
-                state = tie;
+                    if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes()) && allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())) {
+                        Score newScore = new Score(game, selfPlayer, (float) 0.5, date);
+                        if (!existsScore(newScore, game))
+                            scoreRepository.save(newScore);
+                        state = tie;
+                    } else if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes())) {
+                        Score newScore = new Score(game, selfPlayer, 0, date);
+                        if (!existsScore(newScore, game))
+                            scoreRepository.save(newScore);
+                        state = lost;
+                    } else if (allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())) {
+                        Score newScore = new Score(game, selfPlayer, 1, date);
+                        if (!existsScore(newScore, game))
+                            scoreRepository.save(newScore);
+                        state = won;
+                    }
+                }
             }
-
-            if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes())){
-                Score newScore = new Score(game, selfPlayer, 0, date);
-                if (!existsScore(newScore, game))
-                    scoreRepository.save(newScore);
-                state = lost;
-            }
-            if (allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())){
-                Score newScore = new Score(game, selfPlayer, 1, date);
-                if (!existsScore(newScore, game))
-                    scoreRepository.save(newScore);
-                state = won;
-            }
         }
-
-
-
         return state;
     }
 
@@ -438,7 +436,6 @@ public class SalvoController {
         return false;
     }
 
-    //---- ?????
     private long getCurrentTurn(GamePlayer self, GamePlayer opponent){
 
         int selfGPSalvoes = self.getSalvoes().size();
@@ -452,9 +449,7 @@ public class SalvoController {
         return(int) (totalSalvoes / 2.0 + 0.5);
     }
 
-
  //-----------------------------------------------
-
 
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -622,6 +617,7 @@ public class SalvoController {
 
         else {
             if (!hasTurnedSalvo(salvo, gamePlayer.getSalvoes())) {
+                salvo.setTurn(gamePlayer.getSalvoes().size() + 1);
                 gamePlayer.addSalvo(salvo);
                 salvo.setGamePlayer(gamePlayer);
                 salvoRepository.save(salvo);

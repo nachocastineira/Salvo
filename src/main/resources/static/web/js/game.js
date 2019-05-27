@@ -174,10 +174,10 @@ function showSelf (gamePlayerData) {
 
     gamePlayerData.gamePlayers.forEach(function(gamePlayer) {
         if (gamePlayer.id == getParameterByName("gp")) {
-            you = gamePlayer.player.name;
+            you = gamePlayer.player.username;
             youID = gamePlayer.player.id;
         } else {
-            viewer = gamePlayer.player.name;
+            viewer = gamePlayer.player.username;
             $('#OpponentPlayerName').removeClass('waitingPlayer');
         }
     });
@@ -393,7 +393,7 @@ function makeSalvoJSON() {
         salvoPositions.push(salvo5cellID);
     }
     salvoObject = {
-        salvoLocations : salvoPositions
+        locations : salvoPositions
     }
 
     salvoJSON = JSON.stringify(salvoObject);
