@@ -5,9 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AnonymousAuthenticationToken;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -143,8 +143,16 @@ public class SalvoController {
         Player authenticatedPlayer = getAuthentication(authentication);
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
 
+        if (authenticatedPlayer == null) {
+            return new ResponseEntity<>(MakeMap("error","no player logged in"), HttpStatus.FORBIDDEN);
+        }
+
         if (wrongGamePlayer(gamePlayer, authenticatedPlayer))
-            return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(MakeMap("error","Unauthorized"), HttpStatus.UNAUTHORIZED);
+
+        if(getOpponent(gamePlayer) == null){
+            return new ResponseEntity<>(MakeMap("error", "waiting for next player"),HttpStatus.FORBIDDEN);
+        }
         else
             return new ResponseEntity<>(gameViewDTO(gamePlayerRepository.findById(id).get()), HttpStatus.OK);
     }
@@ -292,13 +300,9 @@ public class SalvoController {
         return dto;
     }
 
-//----------------------------------------- TASK 6 - M2 -----------
-
     private String getGameState(GamePlayer self) {
 
         GamePlayer opponent = getOpponent(self);
-
-        String state = "UNDEFINED";
         String placeShips = "PLACESHIPS";
         String waitingForOpponent = "WAITINGFOROPP";
         String wait = "WAIT";
@@ -308,54 +312,48 @@ public class SalvoController {
         String tie = "TIE";
 
 
-        if (opponent == null) {
-            state = waitingForOpponent;
-        } else {
-            if (getShipsLocations(self).isEmpty())
-                state = placeShips;
+        if (self.getShips().size() == 0)
+            return placeShips;
 
-            else {
-                if (!self.getShips().isEmpty() && opponent.getShips().isEmpty())
-                    state = wait;
+        if (opponent.getShips() == null)
+            return waitingForOpponent;
 
-                long turn = getCurrentTurn(self, opponent);
-                if (self.getSalvoes().size() != turn && !getShipsLocations(opponent).isEmpty() && !getShipsLocations(self).isEmpty())
-                    state = play;
-//            else
-//                state = wait;
+        if (opponent.getShips().size() == 0)
+            return wait;
 
+        long turn = getCurrentTurn(self, opponent);
 
-                if (self.getSalvoes().size() == opponent.getSalvoes().size()) {
+        if (self.getSalvoes().size() == opponent.getSalvoes().size()) {
 
-                    Date date = new Date();
-                    date = Date.from(date.toInstant());
+            Date date = new Date();
+            date = Date.from(date.toInstant());
 
-                    Player selfPlayer = self.getPlayer();
-                    Game game = self.getGame();
+            if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes()) && allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())) {
 
-                    if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes()) && allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())) {
-                        Score newScore = new Score(game, selfPlayer, (float) 0.5, date);
-                        if (!existsScore(newScore, game))
-                            scoreRepository.save(newScore);
-                        state = tie;
-                    } else if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes())) {
-                        Score newScore = new Score(game, selfPlayer, 0, date);
-                        if (!existsScore(newScore, game))
-                            scoreRepository.save(newScore);
-                        state = lost;
-                    } else if (allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())) {
-                        Score newScore = new Score(game, selfPlayer, 1, date);
-                        if (!existsScore(newScore, game))
-                            scoreRepository.save(newScore);
-                        state = won;
-                    }
-                }
+                Score newScore = new Score(self.getGame(), self.getPlayer(), (float) 0.5, date);
+                if (!existsScore(newScore, self.getGame()))
+                    scoreRepository.save(newScore);
+                return tie;
             }
+            if (allPlayerShipsSunk(self.getShips(), opponent.getSalvoes())) {
+                Score newScore = new Score(self.getGame(), self.getPlayer(), 0, date);
+                if (!existsScore(newScore, self.getGame()))
+                    scoreRepository.save(newScore);
+                return lost;
+            }
+            if (allPlayerShipsSunk(opponent.getShips(), self.getSalvoes())) {
+                Score newScore = new Score(self.getGame(), self.getPlayer(), 1, date);
+                if (!existsScore(newScore, self.getGame()))
+                    scoreRepository.save(newScore);
+                return won;
+            }
+            if (self.getSalvoes().size() != turn)
+                return play;
         }
-        return state;
+        return wait;
     }
 
-    private Boolean allPlayerShipsSunk(List<Ship> selfShips, List<Salvo> opponentSalvoes){
+    private Boolean allPlayerShipsSunk(List<Ship> selfShips, List<Salvo> opponentSalvoes) {
         Map<String, Object> damages = getDamages(selfShips, opponentSalvoes);
 
         long selfSunkShips = selfShips
@@ -365,8 +363,9 @@ public class SalvoController {
         return selfSunkShips == 5;
     }
 
-        private Map<String, Object> getDamages(List<Ship> selfShips, List<Salvo> opponentSalvoes) {
+    private Map<String, Object> getDamages(List<Ship> selfShips, List<Salvo> opponentSalvoes) {
 
+        Map<String, Object> dto = new LinkedHashMap<>();
         Integer carrierDamaged = 0;
         Integer battleshipDamaged = 0;
         Integer submarineDamaged = 0;
@@ -397,8 +396,11 @@ public class SalvoController {
                     break;
             }
         }
-            Map<String, Object> dto = new LinkedHashMap<>();
+
+        for (Salvo salvo : opponentSalvoes) {
             List<String> salvoLocationsList = new ArrayList<>();
+            salvoLocationsList.addAll(salvo.getLocations());
+
 
             for (String salvoShot : salvoLocationsList) {
                 if (carrierLocations.contains(salvoShot))
@@ -416,11 +418,13 @@ public class SalvoController {
                 if (patrolboatLocations.contains(salvoShot))
                     patrolboatDamaged++;
             }
-            dto.put("carrier", carrierDamaged);
-            dto.put("battleship", battleshipDamaged);
-            dto.put("submarine", submarineDamaged);
-            dto.put("destroyer", destroyerDamaged);
-            dto.put("patrolboat", patrolboatDamaged);
+        }
+
+        dto.put("carrier", carrierDamaged);
+        dto.put("battleship", battleshipDamaged);
+        dto.put("submarine", submarineDamaged);
+        dto.put("destroyer", destroyerDamaged);
+        dto.put("patrolboat", patrolboatDamaged);
         return dto;
     }
 
@@ -436,20 +440,19 @@ public class SalvoController {
         return false;
     }
 
-    private long getCurrentTurn(GamePlayer self, GamePlayer opponent){
+    private long getCurrentTurn(GamePlayer self, GamePlayer opponent) {
 
         int selfGPSalvoes = self.getSalvoes().size();
         int opponentGPSalvoes = opponent.getSalvoes().size();
 
         int totalSalvoes = selfGPSalvoes + opponentGPSalvoes;
 
-        if(totalSalvoes % 2 == 0)
+        if (totalSalvoes % 2 == 0)
             return totalSalvoes / 2 + 1;
 
-        return(int) (totalSalvoes / 2.0 + 0.5);
+        return (int) (totalSalvoes / 2.0 + 0.5);
     }
 
- //-----------------------------------------------
 
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -457,8 +460,16 @@ public class SalvoController {
         dto.put("created", gamePlayer.getGame().getCreated());
         dto.put("gameState", getGameState(gamePlayer));
         dto.put("gamePlayers", gamePlayer.getGame().getGamePlayers().stream().map(gp -> gamePlayerDTO(gp)));
-        dto.put("ships", gamePlayer.getShips().stream().map(ship -> shipDTO(ship)));
-        dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvoes().stream().map(salvo -> salvoDTO(salvo))));
+
+        if (gamePlayer.getShips().isEmpty())
+            dto.put("ships", new ArrayList<>());
+        else
+            dto.put("ships", gamePlayer.getShips().stream().map(ship -> shipDTO(ship)));
+
+        if (getOpponent(gamePlayer) == null || gamePlayer.getSalvoes().isEmpty())
+            dto.put("salvoes", new ArrayList<>());
+        else
+            dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvoes().stream().map(salvo -> salvoDTO(salvo))));
         dto.put("scores", gamePlayer.getPlayer().getScores().stream().map(score -> scoreDTO(score)));
         dto.put("hits", hitsDTO(gamePlayer));
         return dto;
@@ -530,48 +541,48 @@ public class SalvoController {
     //----------------------  CREATE NEW GAME  ----------------------//
     //crea nuevo game con gamePlayer, se le asigna al usuario logueado --> (variables de sesion)
     @RequestMapping(path = "/games", method = RequestMethod.POST)
-    public ResponseEntity<Object> newGame(Authentication authentication) {
+    public ResponseEntity<Map<String, Object>> newGame(Authentication authentication) {
 
         Player authenticatedPlayer = getAuthentication(authentication);
 
         if (authenticatedPlayer == null)
-            return new ResponseEntity<>("No name given", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(MakeMap("error","No player logged in"), HttpStatus.FORBIDDEN);
 
-        else {
+
             Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
-
             Game newGame = new Game(date);
-            gameRepository.save(newGame);
 
             GamePlayer newGamePlayer = new GamePlayer(newGame, authenticatedPlayer);
+            authenticatedPlayer.addGamePlayer(newGamePlayer);
+
+            gameRepository.save(newGame);
             gamePlayerRepository.save(newGamePlayer);
 
-            return new ResponseEntity<>("Game Created", HttpStatus.CREATED);
-        }
+        return new ResponseEntity<>(MakeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
+
     }
 
     //----------------------  JOIN GAME  ----------------------//
     @RequestMapping(path = "game/{id}/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> joinGame(Authentication authentication, @PathVariable long id) {
+    public ResponseEntity<Map<String, Object>> joinGame(Authentication authentication, @PathVariable long id) {
 
         Player authenticatedPlayer = getAuthentication(authentication);
 
         Game gameActual = gameRepository.findById(id).get();
 
         if (authenticatedPlayer == null)
-            return new ResponseEntity<>("No such player", HttpStatus.UNAUTHORIZED);
+            return new ResponseEntity<>(MakeMap("error", "No such player"), HttpStatus.UNAUTHORIZED);
 
         if (gameActual == null)
-            return new ResponseEntity<>("No such game", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(MakeMap("error", "No such game"), HttpStatus.CONFLICT);
 
         if (gameActual.getGamePlayers().size() >= 2)
-            return new ResponseEntity<>("Game is full", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(MakeMap("error", "Game is full"), HttpStatus.FORBIDDEN);
 
-        else {
-            GamePlayer newGamePlayer = new GamePlayer(gameActual, authenticatedPlayer);
-            gamePlayerRepository.save(newGamePlayer);
-            return new ResponseEntity<>("Game join successfully", HttpStatus.CREATED);
-        }
+        GamePlayer newGamePlayer = new GamePlayer(gameActual, authenticatedPlayer);
+        gamePlayerRepository.save(newGamePlayer);
+        gameActual.addGamePlayer(newGamePlayer);
+        return new ResponseEntity<>(MakeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
     }
 
     //----------------------  ADD SHIPS  ----------------------//
@@ -637,9 +648,10 @@ public class SalvoController {
         return hasSalvoes;
     }
 
-
-
-
-
-
+    //----------------------------------------Creates a map-------------------------------------------------
+    private  Map<String,Object> MakeMap(String key, Object value){
+        Map<String,Object> map = new LinkedHashMap<>();
+        map.put(key,value);
+        return map;
+    }
 }

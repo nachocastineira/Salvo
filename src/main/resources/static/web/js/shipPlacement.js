@@ -134,8 +134,8 @@ function renderPositions(positions) {
 			}
 		}
 		shipObject = {
-			shipType : positions[i].id,
-			shipLocations : shipPosition
+			type : positions[i].id,
+			locations : shipPosition
 		}
 		shipData.push(shipObject);
 		
