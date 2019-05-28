@@ -77,12 +77,13 @@ public class SalvoController {
         return gamePlayers
                 .stream()
                 .map(gamePlayer -> gamePlayerDTO(gamePlayer)) //itero, para ir obteniendo todos los gamePlayer con el metodo de abajo
+//                .sorted()
                 .collect(Collectors.toList());
     }
 
     public Map<String, Object> gamePlayerDTO(GamePlayer gamePlayer) { //el map recibe un gamePlayer, y devuelvo sus datos
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
-        dto.put("id", gamePlayer.getId());
+        dto.put("gpid", gamePlayer.getId());
         dto.put("player", gamePlayer.getPlayer());
         return dto;
     }
@@ -539,7 +540,6 @@ public class SalvoController {
     }
 
     //----------------------  CREATE NEW GAME  ----------------------//
-    //crea nuevo game con gamePlayer, se le asigna al usuario logueado --> (variables de sesion)
     @RequestMapping(path = "/games", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> newGame(Authentication authentication) {
 
@@ -547,7 +547,6 @@ public class SalvoController {
 
         if (authenticatedPlayer == null)
             return new ResponseEntity<>(MakeMap("error","No player logged in"), HttpStatus.FORBIDDEN);
-
 
             Date date = Date.from(java.time.ZonedDateTime.now().toInstant());
             Game newGame = new Game(date);
@@ -565,10 +564,10 @@ public class SalvoController {
     //----------------------  JOIN GAME  ----------------------//
     @RequestMapping(path = "game/{id}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(Authentication authentication, @PathVariable long id) {
-
+        System.out.println("GAME:"+id);
         Player authenticatedPlayer = getAuthentication(authentication);
 
-        Game gameActual = gameRepository.findById(id).get();
+        Game gameActual = gameRepository.findById(id).orElse(null);
 
         if (authenticatedPlayer == null)
             return new ResponseEntity<>(MakeMap("error", "No such player"), HttpStatus.UNAUTHORIZED);
@@ -582,6 +581,7 @@ public class SalvoController {
         GamePlayer newGamePlayer = new GamePlayer(gameActual, authenticatedPlayer);
         gamePlayerRepository.save(newGamePlayer);
         gameActual.addGamePlayer(newGamePlayer);
+        System.out.println("GP"+newGamePlayer.getId());
         return new ResponseEntity<>(MakeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
     }
 

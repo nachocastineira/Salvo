@@ -205,7 +205,7 @@ function showGamesTable(gamesData) {
 
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
-                    gpid = gamesData[i].gamePlayers[j].id;
+                    gpid = gamesData[i].gamePlayers[j].gpid;
                     isLoggedPlayer = true;
                 }
             }
@@ -230,7 +230,8 @@ function showGamesTable(gamesData) {
             .done(function (data) {
                 console.log(data);
                 console.log("game joined");
-                gameViewUrl = "/web/game.html?gp=" + gpid;
+                gameViewUrl = "/web/game.html?gp=" + data.gpid;
+                console.log(gpid);
                 $('#gameJoinedSuccess').show("slow").delay(2000).hide("slow");
                 setTimeout(
                    function()
