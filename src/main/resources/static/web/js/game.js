@@ -80,14 +80,14 @@ function refreshGameView(_url) {
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
             }
 
-            if (gamePlayerData.gameState === "PLACESHIPS"){
+            if (gamePlayerData.gameState === "POSICIONAR"){
                 $('#placingShipsBoard').show('puff', 'slow');
             }
-            if (gamePlayerData.gameState === "WAITINGFOROPP"){
+            if (gamePlayerData.gameState === "ESPERANDO_OPONENTE"){
                 $('#battleGrids').show('puff', 'slow');
             }
 
-            if (gamePlayerData.gameState === "WON"){
+            if (gamePlayerData.gameState === "GANASTE"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -95,7 +95,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("yes you won");
             }
-            if (gamePlayerData.gameState === "TIE"){
+            if (gamePlayerData.gameState === "EMPATASTE"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -103,7 +103,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("TIED MATCH");
             }
-            if (gamePlayerData.gameState === "LOST"){
+            if (gamePlayerData.gameState === "PERDISTE"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -111,7 +111,7 @@ function refreshGameView(_url) {
                 $('#gameRecordBlock').show('puff', 'slow');
                 console.log("OH YOU LOST");
             }
-            if (gamePlayerData.gameState === "WAIT"){
+            if (gamePlayerData.gameState === "ESPERE"){
                 $('#battleGrids').show('puff', 'slow');
                 $('#salvoBlock').hide('puff', 'slow');
                 $('#gameRecordBlock').show('puff', 'slow');
@@ -124,7 +124,7 @@ function refreshGameView(_url) {
 
                     }, 5000);
             }
-            if (gamePlayerData.gameState == "PLAY"){
+            if (gamePlayerData.gameState == "JUGAR"){
                 showSelf(gamePlayerData);
                 makeGameRecordTable(gamePlayerData.hits.opponent, "gameRecordOppTable");
                 makeGameRecordTable(gamePlayerData.hits.self, "gameRecordSelfTable");
@@ -173,7 +173,7 @@ function showSelf (gamePlayerData) {
     youID = "";
 
     gamePlayerData.gamePlayers.forEach(function(gamePlayer) {
-        if (gamePlayer.id == getParameterByName("gp")) {
+        if (gamePlayer.gpid == getParameterByName("gp")) {
             you = gamePlayer.player.username;
             youID = gamePlayer.player.id;
         } else {
@@ -353,7 +353,7 @@ function postSalvo (postUrl) {
 }
 
 function displayOverlay(text) {
-    $("<table id='overlay'><tbody><tr><td>" + text + "<br><button class='btn btn-info' onclick='removeOverlay()'>Ok! I got it.</button> </td></tr></tbody></table>").css({
+    $("<table id='overlay'><tbody><tr><td>" + text + "<br><button class='btn btn-white' onclick='removeOverlay()'>CERRAR</button> </td></tr></tbody></table>").css({
         "position": "absolute",
         "top": "0px",
         // "left": "0px",

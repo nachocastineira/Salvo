@@ -125,7 +125,7 @@ body {
 }
 
 .hitCell {
-    background-image: url(../img/hit3.gif);
+    background-image: url(../img/hit.gif);
     background-size: cover;
 }
 
@@ -488,21 +488,20 @@ button:focus {
 
 .selfTable {
     background-image: url(../img/backshipplacement.gif);
-    opacity: 0.9;
-    color: #888888;
+    color: black;
     font-size: 0.8em;
 }
 
 .oppTable {
     background-image: url(../img/backships.gif);
-    opacity: 0.9;
     color: #d8dce0;
     font-size: 0.8em;
 }
 
 .selfTdCell {
-    border: 1px dashed #eab105;
+    border: 1px dashed lightgrey;
     border-left-width: 0;
     border-top-width: 0;
+    background-color: blanchedalmond;
 
 }

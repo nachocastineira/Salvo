@@ -20,8 +20,8 @@
     <script type="text/javascript" src='//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.3.0/gridstack.jQueryUI.min.js'></script>
     <script type="text/javascript" src='//cdn.jsdelivr.net/npm/interactjs@1.3.3/dist/interact.min.js'></script>
     <script src="js/plugins.js"></script>
-    <title>Salvo : Batalla Naval</title>
-    <link rel="icon" href="img/targetself.png">
+    <title>SALVO | Batalla Naval</title>
+    <link rel="icon" href="img/bomb.png">
 </head>
 <body>
 <div class="container-fluid">
@@ -31,7 +31,7 @@
         <a href="games.html"><img class="bannerImage" src="img/titlebannersalvo.png"></a>
             </div>
             <div class="col-sm-6">
-        <div id="gamePlayerDetails" class="gameDetails blockInline"></div><div class="blockInline"><button id="logoutButton" class="btn btn-info"><i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN</button></div>
+        <div id="gamePlayerDetails" class="gameDetails blockInline"></div><div class="blockInline"><button id="logoutButton" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN</button></div>
             </div>
             </div>
     </div>
@@ -58,12 +58,14 @@
                 </div>
 </div>
             <div class="col-sm-12 textCenter">
-                <div class="placeshipsInstructions">Place your ships by dragging and dropping them onto desired positions.<br>You can rotate ships by clicking <img class="rotateIcon" src="img/rotatewhite.png"> icon on every ship.<br>When you finish positioning click on PLACE SHIPS button to begin the battle!</div>
+                <div class="placeshipsInstructions">Colocá tus barcos arrastrándolos y soltándolos en las posiciones deseadas.<br>Podés rotar tus barcos clickeando en el ícono de cada uno. <img class="rotateIcon" src="img/rotatewhite.png"><br>¡Cuándo terminés de posicionarlos presioná el botón POSICIONAR BARCOS para comenzar la partida!</div>
                 <h3 id="okShips" class="textCenter"></h3>
                 <h3 id="errorShips" class="textCenter"></h3>
-                <button class="btn btn-outline-light" id="save-grid">PLACE SHIPS!</button>
+                <button class="btn btn-outline-light font-weight-bold" id="save-grid">POSICIONAR BARCOS</button>
                 <br>
             </div>
+
+        </div>
         </div>
         <div id="battleGrids">
             <div class="row">

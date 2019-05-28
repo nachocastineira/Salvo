@@ -304,13 +304,13 @@ public class SalvoController {
     private String getGameState(GamePlayer self) {
 
         GamePlayer opponent = getOpponent(self);
-        String placeShips = "PLACESHIPS";
-        String waitingForOpponent = "WAITINGFOROPP";
-        String wait = "WAIT";
-        String play = "PLAY";
-        String won = "WON";
-        String lost = "LOST";
-        String tie = "TIE";
+        String placeShips = "POSICIONAR";
+        String waitingForOpponent = "ESPERANDO_OPONENTE";
+        String wait = "ESPERE";
+        String play = "JUGAR";
+        String won = "GANASTE";
+        String lost = "PERDISTE";
+        String tie = "EMPATASTE";
 
 
         if (self.getShips().size() == 0)
@@ -564,7 +564,6 @@ public class SalvoController {
     //----------------------  JOIN GAME  ----------------------//
     @RequestMapping(path = "game/{id}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(Authentication authentication, @PathVariable long id) {
-        System.out.println("GAME:"+id);
         Player authenticatedPlayer = getAuthentication(authentication);
 
         Game gameActual = gameRepository.findById(id).orElse(null);
@@ -581,7 +580,6 @@ public class SalvoController {
         GamePlayer newGamePlayer = new GamePlayer(gameActual, authenticatedPlayer);
         gamePlayerRepository.save(newGamePlayer);
         gameActual.addGamePlayer(newGamePlayer);
-        System.out.println("GP"+newGamePlayer.getId());
         return new ResponseEntity<>(MakeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
     }
 
