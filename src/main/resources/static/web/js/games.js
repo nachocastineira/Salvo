@@ -33,7 +33,6 @@ $('#login-form').on('submit', function (event) {
                 $("#username").val("");
                 $("#password").val("");
                 $("#username").focus();
-                // $('#loginFailed').hide( "slow" );
             })
             .always(function() {
 
@@ -64,7 +63,6 @@ $('#login-form').on('submit', function (event) {
                         $("#username").val("");
                         $("#password").val("");
                         $("#username").focus();
-                        // $('#loginFailed').hide( "slow" );
                     })
                     .always(function() {
 
@@ -174,7 +172,6 @@ function updateView() {
 }
 
 function showGamesTable(gamesData) {
-        // let mytable = $('<table></table>').attr({id: "gamesTable", class: ""});
         let table = "#gamesList tbody";
         let gpid;
         $(table).empty();
@@ -189,19 +186,17 @@ function showGamesTable(gamesData) {
             $('<td class="textCenter">' + gamesData[i].id + '</td>').appendTo(row);
             $('<td class="textCenter">' + DateCreated + '</td>').appendTo(row);
 
-
             for (let j = 0; j < gamesData[i].gamePlayers.length; j++) {
-
 
                 if (gamesData[i].gamePlayers.length == 2) {
                     $('<td class="textCenter">' + gamesData[i].gamePlayers[j].player.username + '</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && (data.player == "Invitado" || data.player.id == gamesData[i].gamePlayers[j].player.id)) {
-                    $('<td class="textCenter">' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500 textCenter">ESPERANDO JUGADOR 1</td>').appendTo(row);
+                    $('<td class="textCenter">' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500 textCenter">ESPERANDO JUGADOR...</td>').appendTo(row);
                 }
                 if (gamesData[i].gamePlayers.length == 1 && data.player.id != null && data.player.id != gamesData[i].gamePlayers[j].player.id) {
-                    $('<td class="textCenter">' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500 textCenter">ESPERANDO JUGADOR 2</td>').appendTo(row);
-                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '><i class="fas fa-gamepad"></i> UNIRSE AL JUEGO</button></td>';
+                    $('<td class="textCenter">' + gamesData[i].gamePlayers[0].player.username + '</td><td class="yellow500 textCenter">ESPERANDO JUGADOR...</td>').appendTo(row);
+                    joinButtonHtml = '<td class="textCenter"><button class="joinGameButton btn btn-info" data-gameid=' + '"' + gamesData[i].id + '"' + '><i class="fas fa-gamepad"></i> UNIRSE A LA PARTIDA</button></td>';
 
                 }
                 if (gamesData[i].gamePlayers[j].player.id == data.player.id) {
@@ -212,13 +207,12 @@ function showGamesTable(gamesData) {
 
             if (isLoggedPlayer === true) {
                 let gameUrl = "/web/game.html?gp=" + gpid;
-                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-light" role="button"><i class="fas fa-eye"></i> MOSTRAR JUEGO</a></td>').appendTo(row);
+                $('<td class="textCenter"><a href=' + '"' + gameUrl + '"' + 'class="btn btn-light" role="button"><i class="fas fa-eye"></i> VISUALIZAR PARTIDA</a></td>').appendTo(row);
             } else if (joinButtonHtml !== null){
                 $(joinButtonHtml).appendTo(row);
             } else {
                 $('<td class="textCenter">-</td>').appendTo(row);
         }
-
 
 
         }
@@ -231,7 +225,6 @@ function showGamesTable(gamesData) {
                 console.log(data);
                 console.log("game joined");
                 gameViewUrl = "/web/game.html?gp=" + data.gpid;
-                console.log(gpid);
                 $('#gameJoinedSuccess').show("slow").delay(2000).hide("slow");
                 setTimeout(
                    function()

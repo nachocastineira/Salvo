@@ -1,5 +1,5 @@
 body {
-    background: url(../img/military.jpg);
+    background: url(../img/back4.jpg);
     font-family: 'Dosis', sans-serif;
 }
 
@@ -243,7 +243,7 @@ body {
 .gameStateLabelBig {
     font-size: 1.3em;
     font-weight: 600;
-    color: #ffc107;
+    color: lightskyblue;
 }
 
 .gameStateLabel {
