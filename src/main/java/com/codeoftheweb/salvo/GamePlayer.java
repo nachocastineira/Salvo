@@ -30,7 +30,7 @@ public class GamePlayer {
     private
     List<Ship> ships;
 
-    @OneToMany(mappedBy = "gamePlayer", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy = "gamePlayer")
     private
     List<Salvo> salvoes;
 

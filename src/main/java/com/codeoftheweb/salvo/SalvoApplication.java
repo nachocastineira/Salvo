@@ -187,13 +187,11 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			scoreRepository.save(score6);
 		};
 	}
-
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();
 	}
 }
-
 
 							//--------------- SECURITY ---------------//
 //-- AUTENTICACION DEL USUARIO

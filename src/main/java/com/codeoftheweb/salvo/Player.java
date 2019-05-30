@@ -22,7 +22,7 @@ public class Player {
     private //el mappedBy coincide con atributo Player player de GamePlayer
             List<GamePlayer> gamePlayers;
 
-    @OneToMany(mappedBy = "player", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "player")
     private List<Score> scores;
 
     private String password;

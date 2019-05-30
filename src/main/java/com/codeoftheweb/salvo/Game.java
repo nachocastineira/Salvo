@@ -19,11 +19,11 @@ public class Game {
     private Long id;
     private Date created;
 
-    @OneToMany(mappedBy="game", fetch=FetchType.EAGER)
+    @OneToMany(mappedBy="game")
     private //el mappedBy coincide con atributo Game game de GamePlayer
             List<GamePlayer> gamePlayers;
 
-    @OneToMany(mappedBy = "game", fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "game")
     private List<Score> scores;
 
     public Game(){}

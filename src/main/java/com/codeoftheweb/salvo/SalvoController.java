@@ -77,7 +77,6 @@ public class SalvoController {
         return gamePlayers
                 .stream()
                 .map(gamePlayer -> gamePlayerDTO(gamePlayer)) //itero, para ir obteniendo todos los gamePlayer con el metodo de abajo
-//                .sorted()
                 .collect(Collectors.toList());
     }
 
