@@ -150,9 +150,6 @@ public class SalvoController {
         if (wrongGamePlayer(gamePlayer, authenticatedPlayer))
             return new ResponseEntity<>(makeMap("error","Unauthorized"), HttpStatus.UNAUTHORIZED);
 
-        if(getOpponent(gamePlayer) == null){
-            return new ResponseEntity<>(makeMap("error", "Esperando un jugador rival"),HttpStatus.FORBIDDEN);
-        }
         else
             return new ResponseEntity<>(gameViewDTO(gamePlayerRepository.findById(id).get()), HttpStatus.OK);
     }
@@ -461,7 +458,7 @@ public class SalvoController {
         dto.put("gameState", getGameState(gamePlayer));
         dto.put("gamePlayers", gamePlayer.getGame().getGamePlayers().stream().map(gp -> gamePlayerDTO(gp)));
 
-        if (gamePlayer.getShips().isEmpty())
+        if (getOpponent(gamePlayer) == null ||gamePlayer.getShips().isEmpty())
             dto.put("ships", new ArrayList<>());
         else
             dto.put("ships", gamePlayer.getShips().stream().map(ship -> shipDTO(ship)));
@@ -470,8 +467,26 @@ public class SalvoController {
             dto.put("salvoes", new ArrayList<>());
         else
             dto.put("salvoes", gamePlayer.getGame().getGamePlayers().stream().flatMap(gamePlayer1 -> gamePlayer1.getSalvoes().stream().map(salvo -> salvoDTO(salvo))));
+
         dto.put("scores", gamePlayer.getPlayer().getScores().stream().map(score -> scoreDTO(score)));
-        dto.put("hits", hitsDTO(gamePlayer));
+
+        if (getOpponent(gamePlayer) == null)
+            dto.put("hits", emptyHits());
+        else {
+
+            if (getOpponent(gamePlayer).getShips().isEmpty() || getOpponent(gamePlayer).getSalvoes().isEmpty())
+                dto.put("hits", emptyHits());
+
+            else
+                dto.put("hits", hitsDTO(gamePlayer));
+        }
+        return dto;
+    }
+
+    private Map<String,Object> emptyHits(){
+        Map<String,Object> dto = new LinkedHashMap<>();
+        dto.put("self", new ArrayList<>());
+        dto.put("opponent", new ArrayList<>());
         return dto;
     }
 
