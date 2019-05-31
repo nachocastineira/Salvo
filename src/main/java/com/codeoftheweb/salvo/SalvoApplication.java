@@ -35,7 +35,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		SpringApplication.run(SalvoApplication.class, args);
 	}
 
-/*	@Bean
+	@Bean
 	public CommandLineRunner initData3
 			(GamePlayerRepository gamePlayerRepository, GameRepository gameRepository,
 			 PlayerRepository playerRepository, ShipRepository shipRepository, SalvoRepository salvoRepository,
@@ -43,7 +43,7 @@ public class SalvoApplication extends SpringBootServletInitializer {
 		return (args) -> {
 
 			//-- NEW DATES
-			Date date = new Date();
+/*			Date date = new Date();
 			date = Date.from(date.toInstant());
 
 			//-- NEW GAMES
@@ -54,22 +54,22 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			gameRepository.save(game1);
 			gameRepository.save(game2);
 			gameRepository.save(game3);
-			gameRepository.save(game4);
+			gameRepository.save(game4);*/
 
 
 			//-- NEW PLAYERS
-			Player player1 = new Player("j.bauer@ctu.gov", passwordEncoder().encode("24"));
-			Player player2 = new Player("c.obrian@ctu.gov", passwordEncoder().encode("42"));
-			Player player3 = new Player("kim_bauer@gmail.com", passwordEncoder().encode("kb"));
-			Player player4 = new Player("t.almeida@ctu.gov", passwordEncoder().encode("mole"));
-			playerRepository.save(player1);
-			playerRepository.save(player2);
-			playerRepository.save(player3);
-			playerRepository.save(player4);
+//			Player player1 = new Player("j.bauer@ctu.gov", passwordEncoder().encode("24"));
+//			Player player2 = new Player("c.obrian@ctu.gov", passwordEncoder().encode("42"));
+//			Player player3 = new Player("kim_bauer@gmail.com", passwordEncoder().encode("kb"));
+//			Player player4 = new Player("t.almeida@ctu.gov", passwordEncoder().encode("mole"));
+//			playerRepository.save(player1);
+//			playerRepository.save(player2);
+//			playerRepository.save(player3);
+//			playerRepository.save(player4);
 
 
 			//-- NEW GAMEPLAYERS
-			GamePlayer gamePlayer1 = new GamePlayer(game1, player1);
+/*			GamePlayer gamePlayer1 = new GamePlayer(game1, player1);
 			GamePlayer gamePlayer2 = new GamePlayer(game1, player3);
 			GamePlayer gamePlayer3 = new GamePlayer(game2, player1);
 			GamePlayer gamePlayer4 = new GamePlayer(game2, player2);
@@ -124,11 +124,11 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			shipRepository.save(ship4);
 
 			Ship ship5_test = new Ship(gamePlayer3, shipLocations4, patrolboat);    //Game 1 -> Player 3
-			shipRepository.save(ship5_test);
+			shipRepository.save(ship5_test);*/
 
 
 			//-- NEW LOCATIONS SALVOES
-			List<String> salvoLocation1 = new ArrayList<>();
+/*			List<String> salvoLocation1 = new ArrayList<>();
 			salvoLocation1.add("D4");
 			salvoLocation1.add("H2");
 			salvoLocation1.add("F5");
@@ -152,9 +152,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			List<String> salvoLocation6 = new ArrayList<>();
 			salvoLocation6.add("F10");
 			salvoLocation6.add("I1");
-			salvoLocation6.add("E6");
+			salvoLocation6.add("E6");*/
 
-			//-- NEW SALVOES
+/*			//-- NEW SALVOES
 			Salvo salvo1 = new Salvo(gamePlayer1, 1, salvoLocation1);
 			Salvo salvo2 = new Salvo(gamePlayer2, 1, salvoLocation4);
 			Salvo salvo3 = new Salvo(gamePlayer1, 2, salvoLocation2);
@@ -171,9 +171,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			//-- NEW SCORES
 			float win = 1;
 			float tie = (float) 0.5;
-			float lose = 0;
+			float lose = 0;*/
 
-			Score score1 = new Score(game1, player1, win, date);
+/*			Score score1 = new Score(game1, player1, win, date);
 			Score score2 = new Score(game1, player2, lose, date);
 			Score score3 = new Score(game2, player2, tie, date);
 			Score score4 = new Score(game2, player3, tie, date);
@@ -184,9 +184,9 @@ public class SalvoApplication extends SpringBootServletInitializer {
 			scoreRepository.save(score3);
 			scoreRepository.save(score4);
 			scoreRepository.save(score5);
-			scoreRepository.save(score6);
+			scoreRepository.save(score6);*/
 		};
-	}*/
+	}
 	@Bean
 	public PasswordEncoder passwordEncoder() {
 		return PasswordEncoderFactories.createDelegatingPasswordEncoder();

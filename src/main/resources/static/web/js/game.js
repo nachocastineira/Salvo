@@ -175,7 +175,7 @@ function showSelf (gamePlayerData) {
     });
 
     if (viewer === "") {
-        viewer = "Waiting for player!";
+        viewer = "¡Esperando un oponente!";
         $('#OpponentPlayerName').addClass('waitingPlayer');
     }
 

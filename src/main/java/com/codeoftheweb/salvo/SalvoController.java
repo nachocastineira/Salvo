@@ -312,11 +312,11 @@ public class SalvoController {
         if (self.getShips().size() == 0)
             return placeShips;
 
-        if (opponent.getShips() == null)
+        if (opponent == null)
             return waitingForOpponent;
 
-        if (opponent.getShips().size() == 0)
-            return wait;
+/*        if (opponent.getShips().isEmpty())
+            return wait;*/
 
         long turn = getCurrentTurn(self, opponent);
 
