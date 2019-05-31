@@ -16,7 +16,7 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
 
 * Utilización de __Gradle 5.4.1__
 
-* Base de Datos __H2__ y manejo de __Java Persistence API (JPA)__
+* Base de Datos __MySQL__ y manejo de __Java Persistence API (JPA)__
 
 * FrontEnd desarrollado en __HTML5__, __CSS3__ y __Javascript__
 
@@ -28,6 +28,8 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
   * Descargar e instalar __Java SE [JDK] (v8u111 o posterior)__
 
   * Descargar e instalar __Gradle__
+  
+  * Descargar e instalar __MySQL (Enterprise o Community Edition)__
 
   * Descargar e instalar IDE de preferencia. Se recomienda __IntelliJ IDEA__
  
@@ -37,10 +39,21 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
 
       gradlew bootRun
 
+* Para generar la base de datos y el user admin, correr en consola los siguientes comandos:
+
+      mysql -u root -p
+
+      create database salvo;
+      
+      create user 'admin'@'localhost' identified with mysql_native_password by 'admin';
+      
+      grant all privileges on salvo.* to 'admin'@'localhost';
 
 * Si los comandos fueron ingresados correctamente, podrá acceder al proyecto desde la siguiente url:
 
      :globe_with_meridians: <http://localhost:8080/web/games.html>
+ 
+ * Si los comandos dan error, revisar que estén configuradas las variables de entorno de Java, Gradle y MySQL en panel de control. 
 
 ***
 #### :computer:  Proyecto realizado por Ignacio Castiñeira <https://github.com/nachocastineira>
