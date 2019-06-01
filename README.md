@@ -22,7 +22,7 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
 
 * Utilización del framework __Bootstrap v4.1.3__
 ------------------------------------
- ### :eyes: Puntos importante para correr el proyecto:
+ ### :exclamation: Puntos importante para correr el proyecto:
   * Descargar e instalar __JAVA (v8 o posterior)__
 
   * Descargar e instalar __Java SE [JDK] (v8u111 o posterior)__
@@ -50,12 +50,25 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
       gradlew bootRun
 
 
+ * Si los comandos dan error, revisar que estén configuradas las variables de entorno de Java, Gradle y MySQL en panel de control. 
+
 
 * Si los comandos fueron ingresados correctamente, podrá acceder al proyecto desde la siguiente url:
 
      :globe_with_meridians: <http://localhost:8080/web/games.html>
  
- * Si los comandos dan error, revisar que estén configuradas las variables de entorno de Java, Gradle y MySQL en panel de control. 
+
+***
+### :eyes: Interfaz de SALVO Batalla Naval: ####
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%201_zpsxb2xbt7v.png)
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%202_zps9jouktwg.png)
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%203_zpsmibqlp9i.png)
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%205_zpsre5buue0.png)
+
 
 ***
 #### :computer:  Proyecto realizado por Ignacio Castiñeira <https://github.com/nachocastineira>
