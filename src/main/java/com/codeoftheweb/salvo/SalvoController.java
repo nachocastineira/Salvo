@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.*;
 import java.util.stream.Collectors;
 
+
 @RestController
 @RequestMapping("/api")
 public class SalvoController {
@@ -44,6 +45,7 @@ public class SalvoController {
         return dto;
     }
 
+    //---------------------------------------- AUTHENTICATION -------------------------------------------------
     private Player getAuthentication(Authentication authentication) {
         if (authentication == null || authentication instanceof AnonymousAuthenticationToken)
             return null;
@@ -51,6 +53,7 @@ public class SalvoController {
             return (playerRepository.findByUsername(authentication.getName()));
     }
 
+    //---------------------------------------- GET_GAMES & GAME_DTO -------------------------------------------------
     public List<Object> getGames() {
         return gameRepository
                 .findAll()
@@ -68,11 +71,7 @@ public class SalvoController {
         return dto;
     }
 
-    public List<Object> getScoreLista(List<Score> scores) {
-        return scores.stream().map(score -> scoreDTO(score)).collect(Collectors.toList());
-    }
-
-    //hago lo mismo que arriba pero itero los gamePlayers
+    //---------------------------------------- GET_GAMEPLAYER & GAMEPLAYER_DTO -------------------------------------------------
     public List<Object> getGamePlayersLista(List<GamePlayer> gamePlayers) {
         return gamePlayers
                 .stream()
@@ -87,7 +86,7 @@ public class SalvoController {
         return dto;
     }
 
-
+    //---------------------------------------- SHIP_DTO & SHIP_LIST -------------------------------------------------
     private Map<String, Object> shipDTO(Ship ship) {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("type", ship.getType());
@@ -102,6 +101,7 @@ public class SalvoController {
                 .collect(Collectors.toList());
     }
 
+    //---------------------------------------- SALVO_DTO & SALVO_LIST -------------------------------------------------
     public Map<String, Object> salvoDTO(Salvo salvo) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("turn", salvo.getTurn());
@@ -117,6 +117,7 @@ public class SalvoController {
                 .collect(Collectors.toList());
     }
 
+    //---------------------------------------- SCORE_DTO & SCORE_LIST -------------------------------------------------
     public Map<String, Object> scoreDTO(Score score) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("playerID", score.getPlayer().getId());
@@ -124,6 +125,11 @@ public class SalvoController {
         dto.put("finishDate", score.getFinishDate());
         return dto;
     }
+
+    public List<Object> getScoreLista(List<Score> scores) {
+        return scores.stream().map(score -> scoreDTO(score)).collect(Collectors.toList());
+    }
+
 
     private List<Map<String, Object>> getSalvoList(Game game) {
         List<Map<String, Object>> myList = new ArrayList<>();
@@ -137,15 +143,15 @@ public class SalvoController {
         return myList;
     }
 
+    //---------------------------------------- GET GAME VIEW -------------------------------------------------
     @RequestMapping("/game_view/{id}")
     public ResponseEntity<Map<String, Object>> getGameView(@PathVariable long id, Authentication authentication) {
 
         Player authenticatedPlayer = getAuthentication(authentication);
         GamePlayer gamePlayer = gamePlayerRepository.findById(id).orElse(null);
 
-        if (authenticatedPlayer == null) {
+        if (authenticatedPlayer == null)
             return new ResponseEntity<>(makeMap("error","no player logged in"), HttpStatus.FORBIDDEN);
-        }
 
         if (wrongGamePlayer(gamePlayer, authenticatedPlayer))
             return new ResponseEntity<>(makeMap("error","Unauthorized"), HttpStatus.UNAUTHORIZED);
@@ -154,9 +160,6 @@ public class SalvoController {
             return new ResponseEntity<>(gameViewDTO(gamePlayerRepository.findById(id).get()), HttpStatus.OK);
     }
 
-
-//Map -> Recibe una entrada y devuelve una salida
-//FlatMap -> Recibe una entrada y devuelve varias salidas
 
     public List<String> getShipsLocations(GamePlayer gamePlayer) {
         List<String> shipsLocations = gamePlayer.getShips().stream().map(ship -> ship.getLocations()).flatMap(locations -> locations.stream()).collect(Collectors.toList());
@@ -168,29 +171,13 @@ public class SalvoController {
         return salvoesLocations;
     }
 
-    //  Solo traigo las celdas que coinciden en ambas listas, traidas con los dos metodos anteriores
-    public List<String> getHitsLocations(GamePlayer gamePlayer) {
 
-        List<String> locationsShipsSelf = getShipsLocations(gamePlayer);
-        List<String> locationsSalvosOpponent = getSalvoesLocations(getOpponent(gamePlayer));
-        return locationsShipsSelf.stream().filter(cell -> locationsSalvosOpponent.contains(cell)).collect(Collectors.toList());
-    }
-
-    public Long getCountMissed(GamePlayer gamePlayer) {
-        List<String> locationsShipsSelf = getShipsLocations(gamePlayer);
-        List<String> locationsSalvosOpponent = getSalvoesLocations(getOpponent(gamePlayer));
-
-        Long hits = locationsShipsSelf.stream().filter(cell -> locationsSalvosOpponent.contains(cell)).count();
-        Long salvos = locationsSalvosOpponent.stream().count();
-        Long missed = salvos - hits;
-        return missed;
-    }
-
-    //Un game tiene 2 players, busco el oponente de mi gamePlayer, descartando a mi gamePlayer
+    //---------------------------------------- GET OPPONENT -------------------------------------------------
     public GamePlayer getOpponent(GamePlayer gpSelf) {
         return gpSelf.getGame().getGamePlayers().stream().filter(gp -> gp.getId() != gpSelf.getId()).findAny().orElse(null);
     }
 
+    //---------------------------------------- HITS DTO -------------------------------------------------
     public Map<String, Object> hitsDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("self", getHits(gamePlayer));
@@ -198,6 +185,11 @@ public class SalvoController {
         return dto;
     }
 
+    /**
+     * @param gamePlayer
+     * @return dto con hits obtenidos, junto al turno, tiros fallidos, locaciones del hit y daños por turno
+     */
+    //---------------------------------------- GET HITS -------------------------------------------------
     public List<Map> getHits(GamePlayer gamePlayer) {
 
         List<Map> dto = new ArrayList<>();
@@ -297,6 +289,11 @@ public class SalvoController {
         return dto;
     }
 
+    /**
+     * @param self
+     * @return retorno el estado del juego, segun cada condicional y momento de la partida
+     */
+    //---------------------------------------- GET GAME STATE -------------------------------------------------
     private String getGameState(GamePlayer self) {
 
         GamePlayer opponent = getOpponent(self);
@@ -350,6 +347,11 @@ public class SalvoController {
         return wait;
     }
 
+    /**
+     * @param selfShips
+     * @param opponentSalvoes
+     * @return devuelvo true si todos los ships fueron hundidos
+     */
     private Boolean allPlayerShipsSunk(List<Ship> selfShips, List<Salvo> opponentSalvoes) {
         Map<String, Object> damages = getDamages(selfShips, opponentSalvoes);
 
@@ -360,6 +362,12 @@ public class SalvoController {
         return selfSunkShips == 5;
     }
 
+    /**
+     * @param selfShips
+     * @param opponentSalvoes
+     * @return dto con mis daños obtenidos
+     */
+    //---------------------------------------- GET DAMAGES -------------------------------------------------
     private Map<String, Object> getDamages(List<Ship> selfShips, List<Salvo> opponentSalvoes) {
 
         Map<String, Object> dto = new LinkedHashMap<>();
@@ -398,7 +406,6 @@ public class SalvoController {
             List<String> salvoLocationsList = new ArrayList<>();
             salvoLocationsList.addAll(salvo.getLocations());
 
-
             for (String salvoShot : salvoLocationsList) {
                 if (carrierLocations.contains(salvoShot))
                     carrierDamaged++;
@@ -426,6 +433,7 @@ public class SalvoController {
     }
 
 
+    //---------------------------------------- EXISTS SCORE -------------------------------------------------
     //Para verificar si a un juego X ya se le asoció un score final
     private Boolean existsScore(Score score, Game game) {
 
@@ -437,6 +445,12 @@ public class SalvoController {
         return false;
     }
 
+    //---------------------------------------- CURRENT TURN -------------------------------------------------
+    /**
+     * @param self
+     * @param opponent
+     * @return
+     */
     private long getCurrentTurn(GamePlayer self, GamePlayer opponent) {
 
         int selfGPSalvoes = self.getSalvoes().size();
@@ -450,7 +464,7 @@ public class SalvoController {
         return (int) (totalSalvoes / 2.0 + 0.5);
     }
 
-
+    //---------------------------------------- GAME VIEW DTO -------------------------------------------------
     private Map<String, Object> gameViewDTO(GamePlayer gamePlayer) {
         Map<String, Object> dto = new LinkedHashMap<>();
         dto.put("id", gamePlayer.getGame().getId());
@@ -473,16 +487,15 @@ public class SalvoController {
         if (getOpponent(gamePlayer) == null)
             dto.put("hits", emptyHits());
         else {
-
             if (getOpponent(gamePlayer).getShips().isEmpty() || getOpponent(gamePlayer).getSalvoes().isEmpty())
                 dto.put("hits", emptyHits());
-
             else
                 dto.put("hits", hitsDTO(gamePlayer));
         }
         return dto;
     }
 
+    //---------------------------------------- EMPTY HITS -------------------------------------------------
     private Map<String,Object> emptyHits(){
         Map<String,Object> dto = new LinkedHashMap<>();
         dto.put("self", new ArrayList<>());
@@ -490,6 +503,7 @@ public class SalvoController {
         return dto;
     }
 
+    //---------------------------------------- PLAYER DTO -------------------------------------------------
     private Map<String, Object> playerDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
@@ -498,6 +512,7 @@ public class SalvoController {
         return dto;
     }
 
+    //---------------------------------------- LOGGED PLAYER DTO -------------------------------------------------
     private Map<String, Object> loggedPlayerDTO(Player player) {
         Map<String, Object> dto = new LinkedHashMap<String, Object>();
         dto.put("id", player.getId());
@@ -505,6 +520,7 @@ public class SalvoController {
         return dto;
     }
 
+    //---------------------------------------- LEADERBOARD -------------------------------------------------
     @RequestMapping("/leaderBoard")
     public List<Object> getAllScores() {
         return playerRepository
@@ -532,13 +548,14 @@ public class SalvoController {
         return dto;
     }
 
+    //---------------------------------------- WRONG GAME_PLAYER -------------------------------------------------
     //-- Para verificar si el jugador logueado es el que pertenece a tal juego
     private boolean wrongGamePlayer(GamePlayer gamePlayer, Player player) {
         boolean correctGP = gamePlayer.getPlayer().getId() != player.getId();
         return correctGP;
     }
 
-    //----------------------  CREATE NEW PLAYER (SIGN UP)  ----------------------//
+    //---------------------------------------- CREATE NEW PLAYER (SIGN UP) -------------------------------------------------
     @RequestMapping(path = "/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> register(@RequestParam String username, @RequestParam String password) {
 
@@ -553,7 +570,7 @@ public class SalvoController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    //----------------------  CREATE NEW GAME  ----------------------//
+    //---------------------------------------- CREATE NEW GAME -------------------------------------------------
     @RequestMapping(path = "/games", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> newGame(Authentication authentication) {
 
@@ -575,7 +592,13 @@ public class SalvoController {
 
     }
 
-    //----------------------  JOIN GAME  ----------------------//
+
+    //---------------------------------------- JOIN GAME -------------------------------------------------
+    /**
+     * @param authentication
+     * @param id
+     * @return
+     */
     @RequestMapping(path = "game/{id}/players", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> joinGame(Authentication authentication, @PathVariable long id) {
         Player authenticatedPlayer = getAuthentication(authentication);
@@ -597,7 +620,14 @@ public class SalvoController {
         return new ResponseEntity<>(makeMap("gpid", newGamePlayer.getId()), HttpStatus.CREATED);
     }
 
-    //----------------------  ADD SHIPS  ----------------------//
+
+    //---------------------------------------- ADD SHIPS -------------------------------------------------
+    /**
+     * @param authentication
+     * @param ships
+     * @param id
+     * @return
+     */
     @RequestMapping(path = "games/players/{id}/ships", method = RequestMethod.POST)
     public ResponseEntity<Map<String, Object>> addShips(Authentication authentication, @RequestBody List<Ship> ships, @PathVariable long id) {
 
@@ -624,7 +654,14 @@ public class SalvoController {
         }
     }
 
-    //----------------------  ADD SALVOS  ----------------------//
+
+    //---------------------------------------- ADD SALVOS -------------------------------------------------
+    /**
+     * @param authentication
+     * @param salvo
+     * @param id
+     * @return
+     */
     @RequestMapping(path = "games/players/{id}/salvoes", method = RequestMethod.POST)
     public ResponseEntity<Object> addSalvoes(Authentication authentication, @RequestBody Salvo salvo, @PathVariable long id) {
 
@@ -650,8 +687,8 @@ public class SalvoController {
         }
     }
 
+    //----------------------------------------  -------------------------------------------------
     private boolean hasTurnedSalvo(Salvo newSalvo, List<Salvo> salvosGameplayer) {
-
         boolean hasSalvoes = false;
         for (Salvo salvo : salvosGameplayer) {
             if (salvo.getTurn() == newSalvo.getTurn())
@@ -660,7 +697,7 @@ public class SalvoController {
         return hasSalvoes;
     }
 
-    //----------------------------------------Creates a map-------------------------------------------------
+    //---------------------------------------- MAKE MAP (Para retornar mensajes y errores) -------------------------------------------------
     private  Map<String,Object> makeMap(String key, Object value){
         Map<String,Object> map = new LinkedHashMap<>();
         map.put(key,value);
