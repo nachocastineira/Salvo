@@ -65,29 +65,25 @@ body {
     margin-top: 8px;
 }
 
-#loginFailed, #errorSignup, #errorShips, #errorSalvo {
+ #errorShips, #errorSalvo {
     display: none;
     background-color: indianred;
     color: white;
     padding: 10px;
 }
 
-#signupSuccess {
-    display: none;
-    background-color: darkorange;
-    color: black;
-    padding: 10px;
-}
 
 #errorMsg {
     display: none;
 }
 
-#loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess, #okShips, #okSalvo {
+#loginSuccess, #logoutSuccess, #gameCreatedSuccess, #gameJoinedSuccess,  #okSalvo, #loginFailed, #errorSignup, #signupSuccess{
     display: none;
-    background-color: forestgreen;
-    color: white;
-    padding: 10px;
+}
+
+#okShips{
+    display: none;
+    text-decoration-color: black;
 }
 
 #gamesList {
@@ -112,21 +108,23 @@ body {
 }
 
 .salvoCell {
-    background-image: url(../img/target.png);
+    background-image: url(../img/mira.png);
     background-size: cover;
     /* background-color: #87cefa00; */
     color: white;
+    font-weight: bold;
 }
 
 .salvoCellSelf {
-    background-image: url(../img/targetself.png);
+    background-image: url(../img/mira2.png);
     background-size: cover;
     /* background-color: #87cefa00; */
     color: #888888;
+    font-weight: bold;
 }
 
 .hitCell {
-    background-image: url(../img/hit.gif);
+    background-image: url(../img/fire3.gif);
     background-size: cover;
 }
 
@@ -330,7 +328,6 @@ button:focus {
 }
 
 #gameRecordOppTable, #gameRecordSelfTable {
-    opacity: 0.8;
 }
 
 .table td, .table th {
@@ -349,7 +346,10 @@ button:focus {
 }
 
 #username, #password {
-    background-color: #f8f9fa94;
+    background-color: white;
+    opacity: 0.8;
+    font-weight: bold;
+
 }
 
 .whiteColor {

@@ -127,7 +127,7 @@ function refreshGameView(_url) {
                     '                <div class="droppable salvoCharger caught--it" id="salvoout3"><div class="draggable" id="salvo3"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout4"><div class="draggable" id="salvo4"></div></div>\n' +
                     '                <div class="droppable salvoCharger caught--it" id="salvoout5"><div class="draggable" id="salvo5"></div></div>\n' +
-                    '                <div class="textCenter"><button class="btn btn-danger text-white" id="postSalvo"><i class="fas fa-bullseye"></i> DISPARAR <i class="fas fa-bullseye"></i></button></div>\n' +
+                    '                <div class="textCenter"><button class="btn btn-lg btn-danger text-white font-weight-bold" id="postSalvo"><i class="fas fa-bullseye"></i> DISPARAR <i class="fas fa-bullseye"></i></button></div>\n' +
                     '            </div>');
 
                 resetSalvoCellIds();
@@ -180,7 +180,7 @@ function showSelf (gamePlayerData) {
     }
 
     let DateCreated = new Date(gamePlayerData.created);
-    DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
+    DateCreated = DateCreated.getUTCDate() + "/" + (DateCreated.getMonth() + 1 ) +  " - " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
     $('#gamePlayerDetails').html('<span class="labelGame">Partida N°: </span><span class="labelGameBig">' + gamePlayerData.id + '</span><span class="labelGame"> Creada: </span><span class="labelGameBig">' + DateCreated + '</span>');
     $('#currentPlayerName').text(you);
     $('#OpponentPlayerName').text(viewer);
@@ -289,7 +289,6 @@ function postShipLocations (postUrl) {
     })
         .done(function (response) {
             console.log(response);
-            $('#okShips').text(JSON.parse(response).OK);
             $('#okShips').show( "slow" ).delay(3000).hide( "slow" );
             setTimeout(
                 function()
@@ -316,7 +315,6 @@ function postSalvo (postUrl) {
     })
         .done(function (response) {
             console.log(response);
-            $('#okSalvo').text(JSON.parse(response).OK);
             $('#okSalvo').show( "slow" ).delay(3000).hide( "slow" );
             $('#salvoBlock').hide("slow");
             $('.oppCell').removeClass('caught--it');

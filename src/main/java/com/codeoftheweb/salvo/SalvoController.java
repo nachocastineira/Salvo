@@ -540,13 +540,13 @@ public class SalvoController {
 
     //----------------------  CREATE NEW PLAYER (SIGN UP)  ----------------------//
     @RequestMapping(path = "/players", method = RequestMethod.POST)
-    public ResponseEntity<Object> register(@RequestParam String username, @RequestParam String password) {
+    public ResponseEntity<Map<String, Object>> register(@RequestParam String username, @RequestParam String password) {
 
         if (username.isEmpty() || password.isEmpty())
-            return new ResponseEntity<>("Missing data", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error", "Missing data"), HttpStatus.FORBIDDEN);
 
         if (playerRepository.findByUsername(username) != null)
-            return new ResponseEntity<>("El username (" + username + ") se encuentra ocupado.", HttpStatus.FORBIDDEN);
+            return new ResponseEntity<>(makeMap("error","El username (" + username + ") se encuentra ocupado."), HttpStatus.FORBIDDEN);
 
         playerRepository.save(new Player(username, passwordEncoder.encode(password)));
 
@@ -618,7 +618,7 @@ public class SalvoController {
                 ships.forEach(ship -> ship.setGamePlayer(gamePlayer));
                 gamePlayer.setShips(ships);
                 shipRepository.saveAll(ships);
-                return new ResponseEntity<>(makeMap("OK", "¡Barcos posicionados!"), HttpStatus.CREATED);
+                return new ResponseEntity<>(makeMap("OK", "¡Barcos posicionados! Prepárate para disparar."), HttpStatus.CREATED);
             } else
                 return new ResponseEntity<>(makeMap("error", "Player already has ships"), HttpStatus.FORBIDDEN);
         }

@@ -6,27 +6,24 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link href="https://fonts.googleapis.com/css?family=Dosis:200,300,400,600,800" rel="stylesheet">
     <link rel="stylesheet" href="https://necolas.github.io/normalize.css/1.1.3/normalize.css">
-    <link rel="stylesheet" href="css/main.css" />
+    <link rel="stylesheet" href="css/main.css"/>
 
     <script src="js/modernizr-2.6.2.min.js"></script>
-
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.3.0/gridstack.min.css" />
-    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.3.0/gridstack-extra.min.css" />
-
-    <link rel="stylesheet" href="css/style.css" />
-    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css" integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
-
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js" integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
-
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.3.0/gridstack.min.css"/>
+    <link rel="stylesheet" href="//cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.3.0/gridstack-extra.min.css"/>
+    <link rel="stylesheet" href="css/style.css"/>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css"
+          integrity="sha384-oS3vJWv+0UjzBfQzYUhtDYW+Pj2yciDJxpsK1OYPAYjqT085Qq/1cq5FLXAZQ7Ay" crossorigin="anonymous">
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"
+            integrity="sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jqueryui/1.11.0/jquery-ui.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/3.5.0/lodash.min.js"></script>
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.3.0/gridstack.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/gridstack.js/0.3.0/gridstack.jQueryUI.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/interactjs@1.3.3/dist/interact.min.js"></script>
-
     <script src="js/plugins.js"></script>
 
     <title>SALVO Batalla Naval</title>
@@ -37,49 +34,81 @@
     <div class="bannerTitle">
         <div class="row verticalCenterFlex">
             <div class="col-sm-6">
-        <a href="games.html"><img class="bannerImage" src="img/salvobn.png"></a>
+                <a href="games.html"><img class="bannerImage" src="img/salvobn_2.png"></a>
             </div>
             <div class="col-sm-6">
-        <div id="gamePlayerDetails" class="gameDetails blockInline"></div><div class="blockInline"><button id="logoutButton" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> CERRAR SESIÓN</button></div>
+                <div id="gamePlayerDetails" class="gameDetails blockInline"></div>
+                <div class="blockInline">
+                    <button id="logoutButton" class="btn btn-secondary"><i class="fas fa-sign-out-alt"></i> CERRAR
+                        SESIÓN
+                    </button>
+                </div>
             </div>
-            </div>
+        </div>
     </div>
-    <h3 id="logoutSuccess" class="textCenter">¡Hasta pronto!</h3>
     <div id="errorMsg" class="alert alert-danger textCenter"></div>
     <div id="gameStateBlock" class="textCenter"></div>
-    <h3 id="okSalvo" class="textCenter"></h3>
     <h3 id="errorSalvo" class="textCenter"></h3>
-        <div id="placingShipsBoard">
-<div class="margin0auto">
+
+    <div class="alert alert-dark alert-dismissible text-center fade show" id="logoutSuccess" role="alert">
+        <h3 class="text-dark"><i class="fas fa-sign-out-alt"></i><strong> ¡Sesión finalizada!</strong> Hasta pronto.
+        </h3>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="alert alert-success alert-dismissible text-center fade show" id="okShips" role="alert">
+        <h3 class="text-success"><i class="fas fa-thumbs-up"></i><strong> ¡Barcos posicionados!</strong> Prepárate para
+            atacar. </h3>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="alert alert-warning alert-dismissible text-center fade show" id="okSalvo" role="alert">
+        <h3 class="text-dark"><i class="fas fa-thumbs-up"></i><strong> ¡Disparos realizados!</strong> Esperando impactos en el enemigo. </h3>
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div id="placingShipsBoard">
+        <div class="margin0auto">
             <div class="blockInline">
-                    <div id="gridShipsContainer" class="gridShips backShipPlacement">
-                        <div class="grid-stack grid-stack-10" id="grid1">
-                        </div>
+                <div id="gridShipsContainer" class="gridShips backShipPlacement">
+                    <div class="grid-stack grid-stack-10" id="grid1">
                     </div>
                 </div>
-                <div class="blockInline whiteColor">
-                    <div class="shipTypeLabel">CARRIER <span class="shipPoslabel" id="carrierPosition"></span></div>
-                    <div class="shipTypeLabel">BATTLESHIP <span class="shipPoslabel" id="battleshipPosition"></span></div>
-                    <div class="shipTypeLabel">SUBMARINE <span class="shipPoslabel" id="submarinePosition"></span></div>
-                    <div class="shipTypeLabel">DESTROYER <span class="shipPoslabel" id="destroyerPosition"></span></div>
-                    <div class="shipTypeLabel">PATROL BOAT <span class="shipPoslabel" id="patrolboatPosition"></span></div>
-                    <div class="movingMsgBig"></div>
-                </div>
-</div>
-            <div class="col-sm-12 textCenter">
-                <div class="placeshipsInstructions">Colocá tus barcos arrastrándolos y soltándolos en las posiciones deseadas.<br>Podés rotar tus barcos clickeando en el ícono de cada uno. <img class="rotateIcon" src="img/rotatewhite.png"><br>¡Cuándo terminés de posicionarlos presioná el botón POSICIONAR BARCOS para comenzar la partida!</div>
-                <h3 id="okShips" class="textCenter"></h3>
-                <h3 id="errorShips" class="textCenter"></h3>
-                <button class="btn btn-outline-light font-weight-bold" id="save-grid">POSICIONAR BARCOS</button>
-                <br>
             </div>
+            <div class="blockInline whiteColor">
+                <div class="shipTypeLabel">CARRIER <span class="shipPoslabel" id="carrierPosition"></span></div>
+                <div class="shipTypeLabel">BATTLESHIP <span class="shipPoslabel" id="battleshipPosition"></span></div>
+                <div class="shipTypeLabel">SUBMARINE <span class="shipPoslabel" id="submarinePosition"></span></div>
+                <div class="shipTypeLabel">DESTROYER <span class="shipPoslabel" id="destroyerPosition"></span></div>
+                <div class="shipTypeLabel">PATROL BOAT <span class="shipPoslabel" id="patrolboatPosition"></span></div>
+                <div class="movingMsgBig"></div>
+            </div>
+        </div>
+        <div class="col-sm-12 textCenter">
+            <div class="placeshipsInstructions">Colocá tus barcos arrastrándolos y soltándolos en las posiciones
+                deseadas.<br>Podés rotar tus barcos clickeando en el ícono de cada uno. <img class="rotateIcon"
+                                                                                             src="img/rotatewhite.png"><br>¡Cuándo
+                terminés de posicionarlos presioná el botón POSICIONAR BARCOS para comenzar la partida!
+            </div>
+            <h3 id="errorShips" class="textCenter"></h3>
+            <button class="btn btn-outline-light font-weight-bold" id="save-grid">POSICIONAR BARCOS</button>
+            <br>
+        </div>
 
-        </div>
-        </div>
-        <div id="battleGrids">
-            <div class="row">
+    </div>
+</div>
+<div id="battleGrids">
+    <div class="row">
         <div class="col-sm-6">
-            <div class="textCenter"><h4 class="gridTopLabel text-white">Mis Barcos</h4><h4 class="textCenter text-white" id="currentPlayerName"></h4></div>
+            <div class="textCenter"><h4 class="gridTopLabel text-white">Mis Barcos</h4><h4 class="textCenter text-white"
+                                                                                           id="currentPlayerName"></h4>
+            </div>
             <div id="shipsLeftIcons" class="textCenter">
                 <span id="carrierIcon"><img src="img/carrierafloat.png"></span>
                 <span id="battleshipIcon"><img src="img/battleshipafloat.png"></span>
@@ -237,7 +266,8 @@
             <!--// table end //-->
         </div>
         <div class="col-sm-6">
-<div class="textCenter"><h4 class="gridTopLabel text-white">Barcos del oponente</h4><h4 class="textCenter text-white" id="OpponentPlayerName"></h4></div>
+            <div class="textCenter"><h4 class="gridTopLabel text-white">Barcos del enemigo</h4><h4
+                    class="textCenter text-white" id="OpponentPlayerName"></h4></div>
             <div id="shipsLeftIconsOpp" class="textCenter">
                 <span id="oppcarrierIcon"><img src="img/carrierafloat.png"></span>
                 <span id="oppbattleshipIcon"><img src="img/battleshipafloat.png"></span>
@@ -391,47 +421,53 @@
                         <div class="oppCell divTableCell droppable" id="J10"></div>
                     </div>
                 </div>
-    </div>
+            </div>
             <!--// table end //-->
             <div id="salvoBlock">
             </div>
+        </div>
+    </div>
+    <div id="gameRecordBlock">
+        <div class="row">
+            <div class="col-sm-6">
+                <div id=" gameRecordSelf">
+                    <table id="gameRecordSelfTable" class="table table-striped table-dark">
+                        <col class="columnTurn">
+                        <col class="columnDamages">
+                        <thead>
+                        <th class="textCenter">Turno</th>
+                        <th>Disparos recibidos</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+            <div class="col-sm-6">
+                <div id="gameRecordOpponent">
+                    <table id="gameRecordOppTable" class="table table-striped table-dark">
+                        <col class="columnTurn">
+                        <col class="columnDamages">
+                        <thead>
+                        <th class="textCenter">Turno</th>
+                        <th>Disparos al enemigo</th>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-    </div>
-            <div id="gameRecordBlock">
-            <div class="row">
-        <div class="col-sm-6">
-            <div id="gameRecordSelf">
-                <table id="gameRecordSelfTable" class="table table-striped table-dark">
-                  <col class="columnTurn">
-                  <col class="columnDamages">
-                  <thead>
-                  <th class="textCenter">Turno</th><th>Disparos recibidos</th>
-                  </thead>
-                  <tbody></tbody>
-              </table>
-            </div>
-        </div>
-        <div class="col-sm-6">
-            <div id="gameRecordOpponent">
-                <table id="gameRecordOppTable" class="table table-striped table-dark">
-                    <col class="columnTurn">
-                    <col class="columnDamages">
-                    <thead>
-                    <th class="textCenter">Turno</th><th>Disparos al oponente</th>
-                    </thead>
-                    <tbody></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-            </div>
-        </div>
 </div>
 
 <!-- Optional JavaScript -->
 <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
-<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
 <script src="js/shipPlacement.js"></script>
 <script src="js/interactsalvo.js"></script>
 <script src="js/game.js"></script>

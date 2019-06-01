@@ -74,7 +74,6 @@ $('#login-form').on('submit', function (event) {
                 $("#username").val("");
                 $("#password").val("");
                 $("#username").focus();
-                $('#errorSignup').text(data.responseJSON.error);
                 $('#errorSignup').show( "slow" ).delay(3000).hide( "slow" );
             })
             .always(function() {
@@ -119,8 +118,8 @@ $('#createGame').on('submit', function (event) {
         })
         .fail(function (data) {
             console.log("game creation failed");
-            $('#errorSignup').text(data.responseJSON.error);
-            $('#errorSignup').show( "slow" ).delay(4000).hide( "slow" );
+            // $('#errorSignup').text(data.responseJSON.error);
+            $('#loginFailed').show( "slow" ).delay(4000).hide( "slow" );
 
         })
         .always(function () {
@@ -181,7 +180,7 @@ function showGamesTable(gamesData) {
             let joinButtonHtml = null;
 
             let DateCreated = new Date(gamesData[i].created);
-            DateCreated = DateCreated.getMonth() + 1 + "/" + DateCreated.getDate() + " - " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
+            DateCreated = DateCreated.getUTCDate() + "/" + (DateCreated.getMonth() + 1 ) +  " - " + DateCreated.getHours() + ":" + DateCreated.getMinutes();
             let row = $('<tr></tr>').prependTo(table);
             $('<td class="textCenter">' + gamesData[i].id + '</td>').appendTo(row);
             $('<td class="textCenter">' + DateCreated + '</td>').appendTo(row);
