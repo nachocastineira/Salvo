@@ -1,4 +1,4 @@
-![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvobn_zpsccbovp3l.png "Title is optional")
+![picture alt](https://raw.githubusercontent.com/nachocastineira/Salvo/master/src/main/resources/static/web/img/salvobn_2.png)
 ------------------------------------
 
 #### Proyecto desarrollado en el Campus Java de IT Resources ___(Mayo de 2019)___ 
@@ -22,7 +22,7 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
 
 * Utilización del framework __Bootstrap v4.1.3__
 ------------------------------------
- ### :eyes: Puntos importante para correr el proyecto:
+ ### :exclamation: Puntos importante para correr el proyecto:
   * Descargar e instalar __JAVA (v8 o posterior)__
 
   * Descargar e instalar __Java SE [JDK] (v8u111 o posterior)__
@@ -32,6 +32,16 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
   * Descargar e instalar __MySQL (Enterprise o Community Edition)__
 
   * Descargar e instalar IDE de preferencia. Se recomienda __IntelliJ IDEA__
+  
+ * Generar la base de datos y el user admin, corriendo en consola los siguientes comandos:
+
+       mysql -u root -p
+
+       create database salvo;
+      
+       create user 'admin'@'localhost' identified with mysql_native_password by 'admin';
+      
+       grant all privileges on salvo.* to 'admin'@'localhost';
  
 * Correr en consola, desde la raíz del proyecto, los siguientes comandos:
 
@@ -39,21 +49,26 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
 
       gradlew bootRun
 
-* Para generar la base de datos y el user admin, correr en consola los siguientes comandos:
 
-      mysql -u root -p
+ * Si los comandos dan error, revisar que estén configuradas las variables de entorno de Java, Gradle y MySQL en panel de control. 
 
-      create database salvo;
-      
-      create user 'admin'@'localhost' identified with mysql_native_password by 'admin';
-      
-      grant all privileges on salvo.* to 'admin'@'localhost';
 
 * Si los comandos fueron ingresados correctamente, podrá acceder al proyecto desde la siguiente url:
 
      :globe_with_meridians: <http://localhost:8080/web/games.html>
  
- * Si los comandos dan error, revisar que estén configuradas las variables de entorno de Java, Gradle y MySQL en panel de control. 
+
+***
+### :eyes: Interfaz de SALVO Batalla Naval: ####
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%201_zpsxb2xbt7v.png)
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%202_zps9jouktwg.png)
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%203_zpsmibqlp9i.png)
+
+![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvo_interfaz%205_zpsre5buue0.png)
+
 
 ***
 #### :computer:  Proyecto realizado por Ignacio Castiñeira <https://github.com/nachocastineira>
