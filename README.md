@@ -1,4 +1,4 @@
-![picture alt](https://oi410.photobucket.com/albums/pp182/nacho_0804/salvobn_zpsccbovp3l.png "Title is optional")
+![picture alt](https://raw.githubusercontent.com/nachocastineira/Salvo/master/src/main/resources/static/web/img/salvobn_2.png)
 ------------------------------------
 
 #### Proyecto desarrollado en el Campus Java de IT Resources ___(Mayo de 2019)___ 
@@ -32,6 +32,16 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
   * Descargar e instalar __MySQL (Enterprise o Community Edition)__
 
   * Descargar e instalar IDE de preferencia. Se recomienda __IntelliJ IDEA__
+  
+ * Generar la base de datos y el user admin, corriendo en consola los siguientes comandos:
+
+       mysql -u root -p
+
+       create database salvo;
+      
+       create user 'admin'@'localhost' identified with mysql_native_password by 'admin';
+      
+       grant all privileges on salvo.* to 'admin'@'localhost';
  
 * Correr en consola, desde la raíz del proyecto, los siguientes comandos:
 
@@ -39,15 +49,7 @@ En cada partida se determinará un __ganador__ y un __perdedor__, o un __empate 
 
       gradlew bootRun
 
-* Para generar la base de datos y el user admin, correr en consola los siguientes comandos:
 
-      mysql -u root -p
-
-      create database salvo;
-      
-      create user 'admin'@'localhost' identified with mysql_native_password by 'admin';
-      
-      grant all privileges on salvo.* to 'admin'@'localhost';
 
 * Si los comandos fueron ingresados correctamente, podrá acceder al proyecto desde la siguiente url:
 
