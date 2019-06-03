@@ -562,6 +562,12 @@ public class SalvoController {
         if (username.isEmpty() || password.isEmpty())
             return new ResponseEntity<>(makeMap("error", "Missing data"), HttpStatus.FORBIDDEN);
 
+        if (username.length()>25)
+            return new ResponseEntity<>(makeMap("errorCaract", "Maximo de caracteres excedido"), HttpStatus.FORBIDDEN);
+
+        if (password.length()>25)
+            return new ResponseEntity<>(makeMap("errorc", "Maximo de caracteres excedido"), HttpStatus.FORBIDDEN);
+
         if (playerRepository.findByUsername(username) != null)
             return new ResponseEntity<>(makeMap("error","El username (" + username + ") se encuentra ocupado."), HttpStatus.FORBIDDEN);
 
